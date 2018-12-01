@@ -3,15 +3,20 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>Archives: 2017 | Ricos New Blog</title>
+  <title>Ubuntu 18.10 installation notes | Ricos New Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Ricos New Blog">
-<meta property="og:url" content="http://midnightcodr.github.io/archives/2017/index.html">
+  <meta name="description" content="Ubuntu 18.10 was released not long ago and I decided to give it a try on my Acer Helios 300 (2018 version) and I couldn’t be happier with the result that I made the switch from Manjaro. Hardware prepa">
+<meta name="keywords" content="ubuntu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu 18.10 installation notes">
+<meta property="og:url" content="http://midnightcodr.github.io/2018/12/01/Ubuntu-18-10-installation-notes/index.html">
 <meta property="og:site_name" content="Ricos New Blog">
+<meta property="og:description" content="Ubuntu 18.10 was released not long ago and I decided to give it a try on my Acer Helios 300 (2018 version) and I couldn’t be happier with the result that I made the switch from Manjaro. Hardware prepa">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-12-01T21:57:31.043Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ricos New Blog">
+<meta name="twitter:title" content="Ubuntu 18.10 installation notes">
+<meta name="twitter:description" content="Ubuntu 18.10 was released not long ago and I decided to give it a try on my Acer Helios 300 (2018 version) and I couldn’t be happier with the result that I made the switch from Manjaro. Hardware prepa">
   
     <link rel="alternative" href="/atom.xml" title="Ricos New Blog" type="application/atom+xml">
   
@@ -61,39 +66,82 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/05/29/ditch-moment-js-for-date-fns/" class="archive-article-date">
-  <time datetime="2017-05-29T19:50:42.000Z" itemprop="datePublished">May 29</time>
+        <section id="main"><article id="post-Ubuntu-18-10-installation-notes" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/01/Ubuntu-18-10-installation-notes/" class="article-date">
+  <time datetime="2018-12-01T20:57:55.000Z" itemprop="datePublished">2018-12-01</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/os/">os</a>►<a class="article-category-link" href="/categories/os/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/29/ditch-moment-js-for-date-fns/">ditch moment.js for date-fns</a>
+    <h1 class="article-title" itemprop="name">
+      Ubuntu 18.10 installation notes
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://www.ubuntu.com/download/alternative-downloads" target="_blank" rel="noopener">Ubuntu 18.10</a> was released not long ago and I decided to give it a try on my Acer Helios 300 (2018 version) and I couldn’t be happier with the result that I made the switch from Manjaro.</p>
+<h2 id="Hardware-preparation"><a href="#Hardware-preparation" class="headerlink" title="Hardware preparation"></a>Hardware preparation</h2><p>I opted to keep the default Windows 10 installation on the built-in nvme drive and install an spare 120G SSD drive to the ssd slot. By default BIOS has SATA mode set to <code>Optane</code> mode which would cause ubuntu not being able to see the drive. Change to <code>ACHI</code> mode instead. Secure Boot feature also needs to be disabled in the BIOS. The trackpad is set to <code>Advanced</code> mode by default in BIOS, change it to <code>Basic</code> because otherwise it won’t operate in Linux.</p>
+<h2 id="A-note-on-backing-up-the-disk-to-an-image"><a href="#A-note-on-backing-up-the-disk-to-an-image" class="headerlink" title="A note on backing up the disk to an image"></a>A note on backing up the disk to an image</h2><p>If you want to do a whole system backup before making any changes. You can use <code>Deepin Clone</code> tool from [Deepin Live System] (<a href="https://www.deepin.org/en/download/)" target="_blank" rel="noopener">https://www.deepin.org/en/download/)</a>. I used to use <code>CloneZilla</code> to make system backups but it no longer works on this laptop even with UEFI version of the tool - it just won’t show up in the boot menu.</p>
+<h2 id="Software-preparation"><a href="#Software-preparation" class="headerlink" title="Software preparation"></a>Software preparation</h2><p>Downloading the iso from ubuntu.com might be painfully slow. To speed up the downloading, use a bittorrent tool and download from <a href="http://releases.ubuntu.com/cosmic/" target="_blank" rel="noopener">here</a> instead. I downloaded <a href="http://releases.ubuntu.com/cosmic/ubuntu-18.10-desktop-amd64.iso.torrent" target="_blank" rel="noopener">http://releases.ubuntu.com/cosmic/ubuntu-18.10-desktop-amd64.iso.torrent</a></p>
+<h2 id="“missing”-touchpad-right-click-button"><a href="#“missing”-touchpad-right-click-button" class="headerlink" title="“missing” touchpad right click button"></a>“missing” touchpad right click button</h2><p>Upon reboot after the installation, I found that the right button on the trackpad behaves exactly the same as the left button (or a single tap since I enabled that). A bit googling indicates that the two finger tap is the replacement. Therefore make sure tapping is enabled in touchpad and remember to use two finger tapping to mimic the old right click. It doesn’t take long before I get used to the new behavior.</p>
+<h2 id="install-docker-with-the-correct-user-group-setting"><a href="#install-docker-with-the-correct-user-group-setting" class="headerlink" title="install docker with the correct user/group setting"></a>install docker with the correct user/group setting</h2><p>If you plan to install docker and operate it with non-root user, make sure you do the following BEFORE you install it (under Ubuntu Software)<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker $USER</span><br><span class="line">newgrp docker</span><br></pre></td></tr></table></figure></p>
+<p>Without the above steps it requires root privileges to run docker commands.</p>
+<h2 id="Don’t-install-visual-studio-code-from-Ubuntu-Software"><a href="#Don’t-install-visual-studio-code-from-Ubuntu-Software" class="headerlink" title="Don’t install visual studio code from Ubuntu Software"></a>Don’t install visual studio code from Ubuntu Software</h2><p>Instead, download and install the package from <a href="https://go.microsoft.com/fwlink/?LinkID=760868" target="_blank" rel="noopener">https://go.microsoft.com/fwlink/?LinkID=760868</a>.<br>If you do install from Ubuntu Software (aka snap) you’ll end up with a very slow start-up problem with VSC. See the issue reported at <a href="https://github.com/Microsoft/vscode/issues/61565" target="_blank" rel="noopener">https://github.com/Microsoft/vscode/issues/61565</a>.</p>
+<h2 id="Get-hardware-sensor-information"><a href="#Get-hardware-sensor-information" class="headerlink" title="Get hardware sensor information"></a>Get hardware sensor information</h2><p>To get information such temperature about the laptop’s cpu/ssd, install <code>Psensor</code> from Ubuntu Software.</p>
+<h2 id="Unofficial-benchmark-results-using-redis"><a href="#Unofficial-benchmark-results-using-redis" class="headerlink" title="Unofficial benchmark results using redis"></a>Unofficial benchmark results using redis</h2><p>With docker/redis I made a quick benchmarking comparison between Manjaro Gnome (17) and Ubuntu (18.10) and I was blown away by the result from Ubuntu. With Manjaro I got about 60K/s operation while I am getting a whopping 150K+/s result from Ubuntu. I am not sure how the result can be so significantly different between Manjaro and Ubuntu. Below is the steps I took on both systems (I did these steps before and after Manjaro is replaced on my laptop).<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull redis</span><br><span class="line">docker <span class="built_in">run</span> <span class="comment">--name my-redis --rm -d redis</span></span><br><span class="line">docker exec -<span class="keyword">it</span> <span class="keyword">my</span>-redis redis-benchmark -q</span><br></pre></td></tr></table></figure></p>
+<p>Hardware configurations of this laptop:</p>
+<ul>
+<li>CPU i7-8750H with 16G of RAM</li>
+<li>256G nvme drive (with Windows 10 installed)</li>
+<li>120G SSD (with Ubuntu 18.10 installed)</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2018/12/01/Ubuntu-18-10-installation-notes/" data-id="cjp5z6ta100109r9wwjf03c1d" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2018/12/01/Ubuntu-18-10-installation-notes/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ubuntu/">ubuntu</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/05/29/ditch-moment-js-for-date-fns/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">ditch moment.js for date-fns</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
 </section>
         
           <aside id="sidebar">
@@ -189,11 +237,13 @@
 <script>
   var disqus_shortname = 'ricosnewblog';
   
+  var disqus_url = 'http://midnightcodr.github.io/2018/12/01/Ubuntu-18-10-installation-notes/';
+  
   (function(){
     var dsq = document.createElement('script');
     dsq.type = 'text/javascript';
     dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
   })();
 </script>
