@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Ricos New Blog">
 <meta property="og:description" content="Joi validation is powerful and easy to work with, however it’s not always obvious or easy to add stuff like error code(s) to the hapijs response. This post will show you a way (or two) to deal with th">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-06-08T20:32:24.229Z">
+<meta property="og:updated_time" content="2019-06-08T20:41:14.906Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Add error code(s) to Hapijs output">
 <meta name="twitter:description" content="Joi validation is powerful and easy to work with, however it’s not always obvious or easy to add stuff like error code(s) to the hapijs response. This post will show you a way (or two) to deal with th">
@@ -102,7 +102,7 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server.ext(<span class="string">'onPreResponse'</span>, (request, h) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> response = request.response</span><br><span class="line">  <span class="keyword">if</span> (!response.isBoom) &#123;</span><br><span class="line">    <span class="keyword">return</span> h.continue</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> &#123; data &#125; = response</span><br><span class="line">  <span class="keyword">if</span> (data !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">    response.output.payload = &#123;</span><br><span class="line">      ...response.output.payload,</span><br><span class="line">      ...data</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> h.continue</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
 <p>With the above setup, request</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:3000/person -d <span class="string">''</span></span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:3000/person -d <span class="string">''</span></span><br></pre></td></tr></table></figure>
 
 <p>would result in</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"statusCode"</span>:<span class="number">400</span>,<span class="attr">"error"</span>:<span class="string">"Bad Request"</span>,<span class="attr">"message"</span>:<span class="string">"child \"firstName\" fails because [Firstname should not be empty!]"</span>,<span class="attr">"errorCode"</span>:<span class="number">111</span>&#125;</span><br></pre></td></tr></table></figure>
@@ -124,7 +124,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://midnightcodr.github.io/2019/06/08/Add-error-code-s-to-Hapijs-validation-output/" data-id="cjwnz57q1001ali9wxbmvslmv" class="article-share-link">Share</a>
+      <a data-url="http://midnightcodr.github.io/2019/06/08/Add-error-code-s-to-Hapijs-validation-output/" data-id="cjwnzhlt7001b009wuacyzyx2" class="article-share-link">Share</a>
       
         <a href="http://midnightcodr.github.io/2019/06/08/Add-error-code-s-to-Hapijs-validation-output/#disqus_thread" class="article-comment-link">Comments</a>
       
