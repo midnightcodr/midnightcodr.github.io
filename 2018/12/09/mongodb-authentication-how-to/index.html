@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>mongodb authentication by example | Ricos New Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ProceduresFollow instruction in reference #1 to create an administrator user12345678use admindb.createUser(  &amp;#123;    user: &quot;superuser&quot;,    pwd: &quot;supercool&quot;,    roles: [ &amp;#123; ro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mongodb authentication by example">
+<meta property="og:url" content="http://midnightcodr.github.io/2018/12/09/mongodb-authentication-how-to/index.html">
+<meta property="og:site_name" content="Ricos New Blog">
+<meta property="og:description" content="ProceduresFollow instruction in reference #1 to create an administrator user12345678use admindb.createUser(  &amp;#123;    user: &quot;superuser&quot;,    pwd: &quot;supercool&quot;,    roles: [ &amp;#123; ro">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-12-09T18:09:22.000Z">
+<meta property="article:modified_time" content="2022-08-10T02:36:53.335Z">
+<meta property="article:author" content="Rico Chen">
+<meta property="article:tag" content="mongodb">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="Ricos New Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 6.2.0"></head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Ricos New Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://midnightcodr.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mongodb-authentication-how-to" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/09/mongodb-authentication-how-to/" class="article-date">
+  <time datetime="2018-12-09T18:09:22.000Z" itemprop="datePublished">2018-12-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mongodb authentication by example
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Procedures"><a href="#Procedures" class="headerlink" title="Procedures"></a>Procedures</h2><h3 id="Follow-instruction-in-reference-1-to-create-an-administrator-user"><a href="#Follow-instruction-in-reference-1-to-create-an-administrator-user" class="headerlink" title="Follow instruction in reference #1 to create an administrator user"></a>Follow instruction in reference #1 to create an administrator user</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> admin</span><br><span class="line"><span class="keyword">db</span>.createUser(</span><br><span class="line">  &#123;</span><br><span class="line">    user: <span class="string">&quot;superuser&quot;</span>,</span><br><span class="line">    <span class="keyword">pwd</span>: <span class="string">&quot;supercool&quot;</span>,</span><br><span class="line">    roles: [ &#123; role: <span class="string">&quot;userAdminAnyDatabase&quot;</span>, <span class="keyword">db</span>: <span class="string">&quot;admin&quot;</span> &#125;, <span class="string">&quot;readWriteAnyDatabase&quot;</span> ]</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Create-non-administrator-users"><a href="#Create-non-administrator-users" class="headerlink" title="Create non-administrator users"></a>Create non-administrator users</h3><p>Once the administrator is created, restart mongod with option <code>--auth</code> enabled, and connect to it using </p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo -u superuser -<span class="selector-tag">p</span> supercool <span class="attr">--authenticationDatabase</span> admin</span><br></pre></td></tr></table></figure>
+
+<p>Let’s say we are going to have a new database named <code>app</code> and we need to create a user to access that. We can either issue <code>use admin</code> or <code>use app</code> before the <code>db.createUser</code> command. Here comes the first note about mongodb authentication: by issuing <code>use app</code>, it doesn’t mean the user (details) will be created in database <code>app</code>, instead, all users information will be stored in <code>system.users</code> collection of <code>admin</code> db. The result of command <code>use admin</code> or <code>use app</code> only serves as an identification purpose for non-administrator user creation, nothing else. Because of this reason and it might be a bit easier for user management, I would suggest that <code>admin</code> be used for all users. Therefore, run the following commands:</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="keyword">app</span></span><br><span class="line"><span class="keyword">db</span>.<span class="keyword">list</span>.insertOne(&#123;</span><br><span class="line">    title: &#x27;learn mongodb authentication&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> admin</span><br><span class="line"><span class="keyword">db</span>.createUser(</span><br><span class="line">  &#123;</span><br><span class="line">    user: <span class="string">&quot;appUser&quot;</span>,</span><br><span class="line">    <span class="keyword">pwd</span>: <span class="string">&quot;appPass&quot;</span>,</span><br><span class="line">    roles: [ &#123; role: <span class="string">&quot;readWrite&quot;</span>, <span class="keyword">db</span>: <span class="string">&quot;app&quot;</span> &#125; ]</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>To test if the user is created successfully, exit mongo shell and issue a new one</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mongo -u appUser -<span class="selector-tag">p</span> appPass <span class="attr">--authenticationDatabase</span> admin app</span><br><span class="line">show collections</span><br></pre></td></tr></table></figure>
+<p>The last command should show the collection <code>list</code> created by <code>superuser</code> in previous mongo shell session. To ensure user appUser does have the read/write privilege in db <code>app</code>,</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">db<span class="selector-class">.find</span>()</span><br><span class="line">db<span class="selector-class">.list</span><span class="selector-class">.insertOne</span>(&#123;</span><br><span class="line">    something: <span class="string">&#x27;else&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line">db<span class="selector-class">.list</span><span class="selector-class">.find</span>()</span><br></pre></td></tr></table></figure>
+<p>Note: Since user <code>appUser</code> is configured to allow access to only db <code>app</code>, if you issue <code>show databases</code> command, only <code>app</code> would return, and that’s also the reason <code>app</code> needs to be specified in the <code>mongo</code> command.</p>
+<h3 id="A-complete-note-js-example"><a href="#A-complete-note-js-example" class="headerlink" title="A complete note.js example"></a>A complete note.js example</h3><figure class="highlight qml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MongoClient = <span class="built_in">require</span>(<span class="string">&#x27;mongodb&#x27;</span>).MongoClient</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="built_in">url</span> = <span class="string">&#x27;mongodb://appUser:appPass@localhost:27017/app?authSource=admin&#x27;</span></span><br><span class="line"><span class="keyword">const</span> db = <span class="string">&#x27;app&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> main = <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;start&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> client = <span class="keyword">await</span> MongoClient.connect(<span class="built_in">url</span>, &#123; <span class="attribute">useNewUrlParser</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">  <span class="keyword">const</span> col = client.db(db).collection(<span class="string">&#x27;list&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> col.find(&#123;&#125;, &#123; <span class="attribute">limit</span>: <span class="number">5</span> &#125;).toArray()</span><br><span class="line">  <span class="built_in">console</span>.log(res)</span><br><span class="line">  <span class="keyword">await</span> client.close()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;end&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Note: option <code>authSource</code> is used to specify <code>authenticationDatabase</code>.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References:"></a>References:</h2><ol>
+<li><p><a target="_blank" rel="noopener" href="https://docs.mongodb.com/manual/tutorial/enable-authentication/">MongoDB Manual</a> on authentication.</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/49445201/mongodb-should-i-put-users-in-admin-db-or-local-db">SO entry</a> on which authentication database to use</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2018/12/09/mongodb-authentication-how-to/" data-id="cl6pz9i8m0018rem95msca9gs" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2018/12/09/mongodb-authentication-how-to/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/" rel="tag">mongodb</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/10/Create-a-mongodb-cluster-with-authentication-enabled/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Create a mongodb cluster using Docker with authentication enabled
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/01/Ubuntu-18-10-installation-notes/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Ubuntu 18.10 installation notes</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DIY/">DIY</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DIY/fun/">fun</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/fun/">fun</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/fun/health/">health</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/fun/health/programming/">programming</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/howto/">howto</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/howto/fun/">fun</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/howto/">howto</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/os/">os</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/os/note/">note</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/programming/">programming</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/programming/security/">security</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tip/">tip</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSL/" rel="tag">SSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/actix-web/" rel="tag">actix-web</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/" rel="tag">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cli/" rel="tag">cli</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fun/" rel="tag">fun</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapijs/" rel="tag">hapijs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/how-to/" rel="tag">how-to</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ikea/" rel="tag">ikea</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/" rel="tag">mongodb</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nagios/" rel="tag">nagios</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/" rel="tag">nodejs</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nsq/" rel="tag">nsq</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openssl/" rel="tag">openssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/raspberrypi/" rel="tag">raspberrypi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rust/" rel="tag">rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tonymacx86/" rel="tag">tonymacx86</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zsh/" rel="tag">zsh</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/SSL/" style="font-size: 10px;">SSL</a> <a href="/tags/actix-web/" style="font-size: 10px;">actix-web</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/cli/" style="font-size: 10px;">cli</a> <a href="/tags/fun/" style="font-size: 10px;">fun</a> <a href="/tags/gitlab/" style="font-size: 10px;">gitlab</a> <a href="/tags/hapijs/" style="font-size: 10px;">hapijs</a> <a href="/tags/how-to/" style="font-size: 10px;">how-to</a> <a href="/tags/ikea/" style="font-size: 10px;">ikea</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/mongodb/" style="font-size: 20px;">mongodb</a> <a href="/tags/nagios/" style="font-size: 10px;">nagios</a> <a href="/tags/nodejs/" style="font-size: 15px;">nodejs</a> <a href="/tags/nsq/" style="font-size: 10px;">nsq</a> <a href="/tags/openssl/" style="font-size: 10px;">openssl</a> <a href="/tags/raspberrypi/" style="font-size: 10px;">raspberrypi</a> <a href="/tags/rust/" style="font-size: 10px;">rust</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/tonymacx86/" style="font-size: 10px;">tonymacx86</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/zsh/" style="font-size: 10px;">zsh</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">June 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">April 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">December 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">November 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/09/How-to-handle-file-uploads-using-actix-web/">How to handle file uploads using actix-web</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/08/Add-error-code-s-to-Hapijs-validation-output/">Add error code(s) to Hapijs output</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/14/How-to-test-nsq-with-docker-and-nsqjs/">How to test nsq with docker (and nsqjs)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/10/Create-a-mongodb-cluster-with-authentication-enabled/">Create a mongodb cluster using Docker with authentication enabled</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/09/mongodb-authentication-how-to/">mongodb authentication by example</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Rico Chen<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'ricosnewblog';
+  
+  var disqus_url = 'http://midnightcodr.github.io/2018/12/09/mongodb-authentication-how-to/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>

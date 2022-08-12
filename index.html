@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Ricos New Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Ricos New Blog">
+<meta property="og:url" content="http://midnightcodr.github.io/index.html">
+<meta property="og:site_name" content="Ricos New Blog">
+<meta property="og:locale">
+<meta property="article:author" content="Rico Chen">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="Ricos New Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+<meta name="generator" content="Hexo 6.2.0"></head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Ricos New Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://midnightcodr.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-How-to-handle-file-uploads-using-actix-web" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/08/09/How-to-handle-file-uploads-using-actix-web/" class="article-date">
+  <time datetime="2022-08-10T03:21:59.000Z" itemprop="datePublished">2022-08-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/08/09/How-to-handle-file-uploads-using-actix-web/">How to handle file uploads using actix-web</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>In this tutorial I’ll demonstrate how to handle upload with additional data fields using one of the most popular Rust web frameworks - <a target="_blank" rel="noopener" href="https://github.com/actix/actix-web">actix-web</a>, which has become my go-to web framework when developing in Rust.</p>
+<p>We’ll start by creating a binary Rust package</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo new doc-demo</span><br></pre></td></tr></table></figure>
+
+<p>Then under the project root, run</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo add actix-web actix-multipart</span><br></pre></td></tr></table></figure>
+
+<p>With your favorite editor, open <code>src/main.rs</code> and copy/paste the following code</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> serde::Serialize;</span><br><span class="line"><span class="keyword">use</span> actix_multipart::Multipart;</span><br><span class="line"><span class="keyword">use</span> futures_util::TryStreamExt <span class="keyword">as</span> _;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> actix_web::&#123; post, App, Error <span class="keyword">as</span> ActixError, HttpResponse, HttpServer &#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Serialize)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Stats</span> &#123;</span><br><span class="line">    lines: <span class="type">usize</span>,</span><br><span class="line">    <span class="meta">#[serde(skip_serializing_if = <span class="string">&quot;Option::is_none&quot;</span>)]</span></span><br><span class="line">    word_count: <span class="type">Option</span>&lt;<span class="type">usize</span>&gt;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[post(<span class="string">&quot;/upload_stats&quot;</span>)]</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">upload_stats</span>(</span><br><span class="line">    <span class="keyword">mut</span> payload: Multipart,</span><br><span class="line">) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;HttpResponse, ActixError&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">file_data</span> = <span class="type">Vec</span>::&lt;<span class="type">u8</span>&gt;::<span class="title function_ invoke__">new</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">layout</span>: <span class="type">Option</span>&lt;<span class="type">String</span>&gt; = <span class="title function_ invoke__">Some</span>(<span class="string">&quot;simple&quot;</span>.<span class="title function_ invoke__">to_owned</span>());</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">let</span> <span class="variable">Some</span>(<span class="keyword">mut</span> field) = payload.<span class="title function_ invoke__">try_next</span>().<span class="keyword">await</span>? &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">content_disposition</span> = field.<span class="title function_ invoke__">content_disposition</span>();</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">field_name</span> = content_disposition.<span class="title function_ invoke__">get_name</span>().<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">        <span class="keyword">match</span> field_name &#123;</span><br><span class="line">            <span class="string">&quot;file&quot;</span> =&gt; &#123;</span><br><span class="line">                <span class="keyword">while</span> <span class="keyword">let</span> <span class="variable">Some</span>(chunk) = field.<span class="title function_ invoke__">try_next</span>().<span class="keyword">await</span>? &#123;</span><br><span class="line">                    file_data.<span class="title function_ invoke__">extend_from_slice</span>(&amp;chunk);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="string">&quot;layout&quot;</span> =&gt; &#123;</span><br><span class="line">                <span class="keyword">let</span> <span class="variable">bytes</span> = field.<span class="title function_ invoke__">try_next</span>().<span class="keyword">await</span>?;</span><br><span class="line">                layout = <span class="type">String</span>::<span class="title function_ invoke__">from_utf8</span>(bytes.<span class="title function_ invoke__">unwrap</span>().<span class="title function_ invoke__">to_vec</span>()).<span class="title function_ invoke__">ok</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            _ =&gt; &#123;&#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">file_content</span> = std::<span class="type">str</span>::<span class="title function_ invoke__">from_utf8</span>(&amp;file_data)?;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">i</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">word_count</span>=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> <span class="variable">line</span> <span class="keyword">in</span> file_content.<span class="title function_ invoke__">lines</span>() &#123;</span><br><span class="line">        word_count+=line.<span class="title function_ invoke__">chars</span>().<span class="title function_ invoke__">count</span>();</span><br><span class="line">        i += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">word_count_res</span> = <span class="keyword">if</span> layout.<span class="title function_ invoke__">unwrap</span>() == <span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;advanced&quot;</span>) &#123;</span><br><span class="line">        <span class="title function_ invoke__">Some</span>(word_count)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="literal">None</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(HttpResponse::<span class="title function_ invoke__">Ok</span>().<span class="title function_ invoke__">json</span>(Stats &#123;</span><br><span class="line">        lines: i,</span><br><span class="line">        word_count: word_count_res</span><br><span class="line">    &#125;))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[actix_web::main]</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">main</span>() <span class="punctuation">-&gt;</span> std::io::<span class="type">Result</span>&lt;()&gt; &#123;</span><br><span class="line">     HttpServer::<span class="title function_ invoke__">new</span>(<span class="keyword">move</span> || &#123;</span><br><span class="line">        App::<span class="title function_ invoke__">new</span>()</span><br><span class="line">            .<span class="title function_ invoke__">service</span>(upload_stats)</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_ invoke__">bind</span>((<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">8080</span>))?</span><br><span class="line">    .<span class="title function_ invoke__">run</span>()</span><br><span class="line">    .<span class="keyword">await</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This simple web application has only one single POST endpoint that will accept</p>
+<ol>
+<li>a field named <code>file</code> that points to a file in client’s file system</li>
+<li>an optional field named <code>layout</code>, its value is defaulted to <code>simple</code></li>
+</ol>
+<p>By default the output will be the line count of the file being uploaded, but a <code>characters</code> result that represents the number of characters in the file will be added if <code>layout</code> is set to <code>advanced</code>. So for example, </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:8080/upload_stats -X POST -F <span class="string">&#x27;file=@Cargo.toml&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>returns something like</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;lines&quot;</span><span class="punctuation">:</span> <span class="number">13</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>While</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:8080/upload_stats -X POST -F <span class="string">&#x27;file=@Cargo.toml&#x27;</span> -F <span class="string">&#x27;layout=advanced&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>might produce something like </p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;lines&quot;</span><span class="punctuation">:</span> <span class="number">13</span><span class="punctuation">,</span> <span class="attr">&quot;characters&quot;</span><span class="punctuation">:</span> <span class="number">311</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>p.s. here’s the full content of <code>Cargo.toml</code></p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[package]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;doc-demo&quot;</span></span><br><span class="line"><span class="attr">version</span> = <span class="string">&quot;0.1.0&quot;</span></span><br><span class="line"><span class="attr">edition</span> = <span class="string">&quot;2021&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies]</span></span><br><span class="line"><span class="attr">actix-multipart</span> = <span class="string">&quot;0.4.0&quot;</span></span><br><span class="line"><span class="attr">actix-web</span> = <span class="string">&quot;4.1.0&quot;</span></span><br><span class="line"><span class="attr">futures-util</span> = <span class="string">&quot;0.3.21&quot;</span></span><br><span class="line"><span class="attr">serde</span> = &#123; version = <span class="string">&quot;1.0.136&quot;</span>, features = [<span class="string">&quot;derive&quot;</span>] &#125;</span><br><span class="line"><span class="attr">serde_json</span> = <span class="string">&quot;1.0.81&quot;</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2022/08/09/How-to-handle-file-uploads-using-actix-web/" data-id="cl6pz9i8p001irem91dii8aeu" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2022/08/09/How-to-handle-file-uploads-using-actix-web/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/actix-web/" rel="tag">actix-web</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/how-to/" rel="tag">how-to</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rust/" rel="tag">rust</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Add-error-code-s-to-Hapijs-validation-output" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/08/Add-error-code-s-to-Hapijs-validation-output/" class="article-date">
+  <time datetime="2019-06-08T19:51:01.000Z" itemprop="datePublished">2019-06-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>►<a class="article-category-link" href="/categories/note/howto/">howto</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/08/Add-error-code-s-to-Hapijs-validation-output/">Add error code(s) to Hapijs output</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Joi validation is powerful and easy to work with, however it’s not always obvious or easy to add stuff like error code(s) to the hapijs response. This post will show you a way (or two) to deal with that problem.</p>
+<h2 id="Step-1-assign-error-codes-to-each-validation-error"><a href="#Step-1-assign-error-codes-to-each-validation-error" class="headerlink" title="Step 1, assign error codes to each validation error"></a>Step 1, assign error codes to each validation error</h2><p>Quick example:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">server.<span class="title function_">route</span>(&#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">  <span class="attr">path</span>: <span class="string">&#x27;/person&#x27;</span>,</span><br><span class="line">  <span class="attr">options</span>: &#123;</span><br><span class="line">    <span class="attr">validate</span>: &#123;</span><br><span class="line">      <span class="attr">payload</span>: &#123;</span><br><span class="line">        <span class="attr">firstName</span>: <span class="title class_">Joi</span>.<span class="title function_">string</span>()</span><br><span class="line">          .<span class="title function_">min</span>(<span class="number">5</span>)</span><br><span class="line">          .<span class="title function_">max</span>(<span class="number">10</span>)</span><br><span class="line">          .required()</span><br><span class="line">          .<span class="title function_">error</span>(<span class="function"><span class="params">errors</span> =&gt;</span> &#123;</span><br><span class="line">            errors.<span class="title function_">forEach</span>(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">              <span class="keyword">switch</span> (err.<span class="property">type</span>) &#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;any.empty&#x27;</span>:</span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;any.required&#x27;</span>:</span><br><span class="line">                  err.<span class="property">message</span> = <span class="string">&#x27;Firstname should not be empty!&#x27;</span></span><br><span class="line">                  err.<span class="property">context</span> = &#123;</span><br><span class="line">                    <span class="attr">errorCode</span>: <span class="number">111</span></span><br><span class="line">                  &#125;</span><br><span class="line">                  <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;string.min&#x27;</span>:</span><br><span class="line">                  err.<span class="property">message</span> = <span class="string">`Firstname should have at least <span class="subst">$&#123;</span></span></span><br><span class="line"><span class="subst"><span class="string">                    err.context.limit</span></span></span><br><span class="line"><span class="subst"><span class="string">                  &#125;</span> characters!`</span></span><br><span class="line">                  err.<span class="property">context</span> = &#123;</span><br><span class="line">                    <span class="attr">errorCode</span>: <span class="number">121</span></span><br><span class="line">                  &#125;</span><br><span class="line">                  <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">case</span> <span class="string">&#x27;string.max&#x27;</span>:</span><br><span class="line">                  err.<span class="property">message</span> = <span class="string">`Firstname should have at most <span class="subst">$&#123;</span></span></span><br><span class="line"><span class="subst"><span class="string">                    err.context.limit</span></span></span><br><span class="line"><span class="subst"><span class="string">                  &#125;</span> characters!`</span></span><br><span class="line">                  err.<span class="property">context</span> = &#123;</span><br><span class="line">                    <span class="attr">errorCode</span>: <span class="number">131</span></span><br><span class="line">                  &#125;</span><br><span class="line">                  <span class="keyword">break</span></span><br><span class="line">                <span class="attr">default</span>:</span><br><span class="line">                  <span class="keyword">break</span></span><br><span class="line">              &#125;</span><br><span class="line">            &#125;)</span><br><span class="line">            <span class="keyword">return</span> errors</span><br><span class="line">          &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">handler</span>: <span class="keyword">async</span> request =&gt; &#123;</span><br><span class="line">    <span class="comment">// todo: handle saving the paylod</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;to save&#x27;</span>, request.<span class="property">payload</span>)</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="attr">result</span>: <span class="string">&#x27;ok&#x27;</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Step-2-customize-failAction-when-creating-Hapi-server"><a href="#Step-2-customize-failAction-when-creating-Hapi-server" class="headerlink" title="Step 2, customize failAction when creating Hapi server"></a>Step 2, customize failAction when creating Hapi server</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Boom</span> = <span class="built_in">require</span>(<span class="string">&#x27;@hapi/boom&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> server = <span class="title class_">Hapi</span>.<span class="title class_">Server</span>(&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">routes</span>: &#123;</span><br><span class="line">    <span class="attr">validate</span>: &#123;</span><br><span class="line">      <span class="attr">failAction</span>: <span class="function">(<span class="params">request, h, err</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> firstError = err.<span class="property">details</span>[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> (firstError.<span class="property">context</span>.<span class="property">errorCode</span> !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">          <span class="keyword">throw</span> <span class="title class_">Boom</span>.<span class="title function_">badRequest</span>(err.<span class="property">message</span>, &#123;</span><br><span class="line">            <span class="attr">errorCode</span>: firstError.<span class="property">context</span>.<span class="property">errorCode</span></span><br><span class="line">          &#125;)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">throw</span> <span class="title class_">Boom</span>.<span class="title function_">badRequest</span>(err.<span class="property">message</span>)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Step-3-customize-response"><a href="#Step-3-customize-response" class="headerlink" title="Step 3, customize response"></a>Step 3, customize response</h2><p>The reason this step is needed is because Hapi would strip out the injected <code>errorCode</code> attribute created by step 2</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server.<span class="title function_">ext</span>(<span class="string">&#x27;onPreResponse&#x27;</span>, <span class="function">(<span class="params">request, h</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> response = request.<span class="property">response</span></span><br><span class="line">  <span class="keyword">if</span> (!response.<span class="property">isBoom</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> h.<span class="property">continue</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> &#123; data &#125; = response</span><br><span class="line">  <span class="keyword">if</span> (data !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">    response.<span class="property">output</span>.<span class="property">payload</span> = &#123;</span><br><span class="line">      ...response.<span class="property">output</span>.<span class="property">payload</span>,</span><br><span class="line">      ...data</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> h.<span class="property">continue</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>With the above setup, request</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:3000/person -d <span class="string">&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>would result in</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;statusCode&quot;</span><span class="punctuation">:</span><span class="number">400</span><span class="punctuation">,</span><span class="attr">&quot;error&quot;</span><span class="punctuation">:</span><span class="string">&quot;Bad Request&quot;</span><span class="punctuation">,</span><span class="attr">&quot;message&quot;</span><span class="punctuation">:</span><span class="string">&quot;child \&quot;firstName\&quot; fails because [Firstname should not be empty!]&quot;</span><span class="punctuation">,</span><span class="attr">&quot;errorCode&quot;</span><span class="punctuation">:</span><span class="number">111</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>By default <code>abortEarly: true</code> is set Hapi, if multiple error codes are desired, only Step 2 needs to be adjusted to</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> server = <span class="title class_">Hapi</span>.<span class="title class_">Server</span>(&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">routes</span>: &#123;</span><br><span class="line">    <span class="attr">validate</span>: &#123;</span><br><span class="line">      <span class="attr">options</span>: &#123;</span><br><span class="line">        <span class="attr">abortEarly</span>: <span class="literal">false</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">failAction</span>: <span class="function">(<span class="params">request, h, err</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> errorCodes = err.<span class="property">details</span></span><br><span class="line">          .<span class="title function_">map</span>(<span class="function"><span class="params">e</span> =&gt;</span> e.<span class="property">context</span>.<span class="property">errorCode</span>)</span><br><span class="line">          .<span class="title function_">filter</span>(<span class="function"><span class="params">e</span> =&gt;</span> e !== <span class="literal">undefined</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="title class_">Boom</span>.<span class="title function_">badRequest</span>(err.<span class="property">message</span>, &#123; errorCodes &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>request</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://localhost:3000/person -d <span class="string">&#x27;firstName=&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>would return</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;statusCode&quot;</span><span class="punctuation">:</span><span class="number">400</span><span class="punctuation">,</span><span class="attr">&quot;error&quot;</span><span class="punctuation">:</span><span class="string">&quot;Bad Request&quot;</span><span class="punctuation">,</span><span class="attr">&quot;message&quot;</span><span class="punctuation">:</span><span class="string">&quot;child \&quot;firstName\&quot; fails because [Firstname should not be empty!, Firstname should have at least 5 characters!]&quot;</span><span class="punctuation">,</span><span class="attr">&quot;errorCodes&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="number">111</span><span class="punctuation">,</span><span class="number">121</span><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>If you need to add error code in your application code, you can simply achieve that by returning a <code>Boom</code> like the following</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="title class_">Boom</span>.<span class="title function_">badRequest</span>(<span class="string">&#x27;Your error message here&#x27;</span>, &#123; <span class="attr">errorCode</span>: <span class="variable constant_">YOUR_CODE</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>I’ve composed a <a target="_blank" rel="noopener" href="https://gist.github.com/midnightcodr/c47a1c3322818e9ba42cd264b19885f6">gist</a> in case you want to save some typings in trying out the code. Cheers!</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2019/06/08/Add-error-code-s-to-Hapijs-validation-output/" data-id="cl6pz9i8o001grem97y0jd9ca" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2019/06/08/Add-error-code-s-to-Hapijs-validation-output/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hapijs/" rel="tag">hapijs</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-How-to-test-nsq-with-docker-and-nsqjs" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/14/How-to-test-nsq-with-docker-and-nsqjs/" class="article-date">
+  <time datetime="2018-12-15T02:47:51.000Z" itemprop="datePublished">2018-12-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>►<a class="article-category-link" href="/categories/note/howto/">howto</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/14/How-to-test-nsq-with-docker-and-nsqjs/">How to test nsq with docker (and nsqjs)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Preparations"><a href="#Preparations" class="headerlink" title="Preparations"></a>Preparations</h2><ol>
+<li>Find out docker host’s IP and create the following shell function. Replace <code>172.17.0.1</code> with the one found on your system:</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> DOCKER_HOST=172.17.0.1</span><br><span class="line"><span class="function"><span class="title">runnsq</span></span>() &#123;</span><br><span class="line">  host=<span class="variable">$DOCKER_HOST</span></span><br><span class="line">  docker run --<span class="built_in">rm</span> --name lookupd -p 4160:4160 -p 4161:4161 -d nsqio/nsq /nsqlookupd</span><br><span class="line">  docker run --<span class="built_in">rm</span> --name nsqd -p 4150:4150 -p 4151:4151 -d nsqio/nsq /nsqd \</span><br><span class="line">      --broadcast-address=<span class="variable">$host</span> --lookupd-tcp-address=<span class="variable">$host</span>:4160</span><br><span class="line">  docker run --<span class="built_in">rm</span> --name nsqadmin -p 4171:4171 -d nsqio/nsq /nsqadmin \</span><br><span class="line">      --lookupd-http-address=<span class="variable">$host</span>:4161</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Get nsq<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull nsqio/nsq</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="Start-the-containers"><a href="#Start-the-containers" class="headerlink" title="Start the containers"></a>Start the containers</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">run-nsq</span><br></pre></td></tr></table></figure>
+
+<h2 id="Publish-a-message"><a href="#Publish-a-message" class="headerlink" title="Publish a message **"></a>Publish a message **</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">curl</span> -d <span class="string">&#x27;hello world&#x27;</span> <span class="string">&quot;http://<span class="variable">$DOCKER_HOST</span>:4151/pub?topic=sample_topic&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Set-up-a-consumer"><a href="#Set-up-a-consumer" class="headerlink" title="Set up a consumer"></a>Set up a consumer</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/projects/test-nsq</span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$_</span></span><br><span class="line">npm i nsqjs</span><br></pre></td></tr></table></figure>
+
+<p>Create consumer.js as listed below. </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// consumer.js</span></span><br><span class="line"><span class="keyword">const</span> nsq = <span class="built_in">require</span>(<span class="string">&#x27;nsqjs&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> reader = <span class="keyword">new</span> nsq.<span class="title class_">Reader</span>(<span class="string">&#x27;sample_topic&#x27;</span>, <span class="string">&#x27;test_channel&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">lookupdHTTPAddresses</span>: <span class="string">`<span class="subst">$&#123;process.env.DOCKER_HOST&#125;</span>:4161`</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">reader.<span class="title function_">connect</span>()</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;started&#x27;</span>)</span><br><span class="line">reader.<span class="title function_">on</span>(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="params">msg</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Received message [%s]: %s&#x27;</span>, msg.<span class="property">id</span>, msg.<span class="property">body</span>.<span class="title function_">toString</span>())</span><br><span class="line">  msg.<span class="title function_">finish</span>()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node consumer.js</span><br></pre></td></tr></table></figure>
+
+<p>You should see something similar to:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Received message [0abc62e587053000]: hello world</span><br></pre></td></tr></table></figure>
+
+<h2 id="nsqadmin"><a href="#nsqadmin" class="headerlink" title="nsqadmin"></a>nsqadmin</h2><p>Open <code>http://127.0.0.1:4171/</code> from a browser.</p>
+<p>** The reason why publisher runs before consumer is for the topic to be created before a consumer can subscribe to it.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2018/12/14/How-to-test-nsq-with-docker-and-nsqjs/" data-id="cl6pz9i8n001crem9g7vp6psv" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2018/12/14/How-to-test-nsq-with-docker-and-nsqjs/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nsq/" rel="tag">nsq</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Create-a-mongodb-cluster-with-authentication-enabled" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/10/Create-a-mongodb-cluster-with-authentication-enabled/" class="article-date">
+  <time datetime="2018-12-11T02:51:49.000Z" itemprop="datePublished">2018-12-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/10/Create-a-mongodb-cluster-with-authentication-enabled/">Create a mongodb cluster using Docker with authentication enabled</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Preparations"><a href="#Preparations" class="headerlink" title="Preparations"></a>Preparations</h2><p>The following needs to be run only once</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/docker-storage/&#123;rc1,rc2,rc3,mongo-keys&#125;</span><br><span class="line">openssl rand -<span class="built_in">base64</span> 741 &gt; ~/docker-storage/mongo-keys/keyfile</span><br><span class="line"><span class="built_in">chmod</span> 600 ~/docker-storage/mongo-keys/keyfile</span><br><span class="line">sudo <span class="built_in">chown</span> 999 ~/docker-storage/mongo-keys/keyfile</span><br><span class="line">docker network create mongo-cluster</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reusable-scripts"><a href="#Reusable-scripts" class="headerlink" title="Reusable scripts"></a>Reusable scripts</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">start_cluster</span></span>() &#123;</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> 1 2 3; <span class="keyword">do</span> docker run --<span class="built_in">rm</span> -p 3000<span class="variable">$i</span>:27017 --name rc<span class="variable">$i</span> --net mongo-cluster  -v ~/docker-storage/rc<span class="variable">$i</span>:/data/db -v ~/docker-storage/mongo-keys/keyfile:/opt/keyfile -d mongo mongod --keyFile /opt/keyfile --replSet test-set; <span class="keyword">done</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">enter</span></span>() &#123;</span><br><span class="line">	docker <span class="built_in">exec</span> -it <span class="variable">$1</span> <span class="variable">$&#123;2:-bash&#125;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">runnode</span></span>() &#123;</span><br><span class="line">    [ <span class="variable">$#</span> -lt 1 ] &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;Usage: <span class="variable">$FUNCNAME</span> script&quot;</span> &amp;&amp; <span class="built_in">return</span></span><br><span class="line">    scriptname=<span class="variable">$1</span></span><br><span class="line">    <span class="built_in">shift</span></span><br><span class="line">    others=$*</span><br><span class="line">     docker run -it --<span class="built_in">rm</span> --name my-node-script -v <span class="string">&quot;<span class="variable">$PWD</span>&quot;</span>:/usr/src/app -w /usr/src/app <span class="variable">$others</span> node:8 node <span class="variable">$scriptname</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Put the above functions into your <code>.bashrc</code> or <code>.zshrc</code> or just a plain script file, i.e. <code>util.sh</code> and source it:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> util.sh</span><br></pre></td></tr></table></figure>
+
+<h2 id="Bring-up-the-cluster-and-enter-rc1"><a href="#Bring-up-the-cluster-and-enter-rc1" class="headerlink" title="Bring up the cluster and enter rc1"></a>Bring up the cluster and enter rc1</h2><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">start_cluster</span></span><br><span class="line">enter rc1</span><br><span class="line"><span class="comment"># once inside rc1</span></span><br><span class="line">mongo</span><br></pre></td></tr></table></figure>
+
+<p>Once in mongo shell,</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br><span class="line">db.<span class="title function_">createUser</span>(</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">user</span>: <span class="string">&quot;superuser&quot;</span>,</span><br><span class="line">    <span class="attr">pwd</span>: <span class="string">&quot;supercool&quot;</span>,</span><br><span class="line">    <span class="attr">roles</span>: [ &#123; <span class="attr">role</span>: <span class="string">&quot;userAdminAnyDatabase&quot;</span>, <span class="attr">db</span>: <span class="string">&quot;admin&quot;</span> &#125;, <span class="string">&quot;readWriteAnyDatabase&quot;</span> ]</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"><span class="title function_">quit</span>()</span><br></pre></td></tr></table></figure>
+
+<p>You will be back to the bash shell of <code>rc1</code>, type the following to get back to first replica with the newly created credential.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo -u superuser -p supercool --authenticationDatabase admin</span><br></pre></td></tr></table></figure>
+
+<p>When mongo shell appears again, issue the following</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">config = &#123;</span><br><span class="line">  <span class="attr">_id</span>: <span class="string">&#x27;test-set&#x27;</span>,</span><br><span class="line">  <span class="attr">members</span>: [</span><br><span class="line">    &#123; <span class="attr">_id</span>: <span class="number">0</span>, <span class="attr">host</span>: <span class="string">&#x27;rc1:27017&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">_id</span>: <span class="number">1</span>, <span class="attr">host</span>: <span class="string">&#x27;rc2:27017&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">_id</span>: <span class="number">2</span>, <span class="attr">host</span>: <span class="string">&#x27;rc3:27017&#x27;</span> &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">rs.<span class="title function_">initiate</span>(config)</span><br></pre></td></tr></table></figure>
+
+<p>You should see</p>
+<pre><code>&#123; &quot;ok&quot; : 1 &#125;
+test-set:SECONDARY&gt; </code></pre><p>Run <code>rs.status()</code> a few times you should be able to see rc1 becomes the MASTER node.</p>
+<p>Now it’s time to create a regular user:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br><span class="line">db.<span class="title function_">createUser</span>(&#123; <span class="attr">user</span>: <span class="string">&#x27;appUser&#x27;</span>, <span class="attr">pwd</span>: <span class="string">&#x27;appPass&#x27;</span>, <span class="attr">roles</span>: [&#123;<span class="attr">db</span>: <span class="string">&#x27;app&#x27;</span>, <span class="attr">role</span>: <span class="string">&#x27;readWrite&#x27;</span>&#125;] &#125;)</span><br><span class="line"><span class="title function_">quit</span>()</span><br></pre></td></tr></table></figure>
+
+<p>Log in to rc1 mongo shell again with <code>appUser</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo -u appUser -p appPass --authenticationDatabase admin</span><br></pre></td></tr></table></figure>
+
+<p>Once in mongo shell of rc1</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use app</span><br><span class="line">db.<span class="property">list</span>.<span class="title function_">insert</span>([</span><br><span class="line">    &#123;<span class="attr">title</span>: <span class="string">&#x27;one&#x27;</span>&#125;,</span><br><span class="line">    &#123;<span class="attr">title</span>: <span class="string">&#x27;two&#x27;</span>&#125;</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+
+<h2 id="Verify-replication"><a href="#Verify-replication" class="headerlink" title="Verify replication"></a>Verify replication</h2><p>To verify replication is working, <code>enter rc2</code>, login to mongo shell with the <code>appUser</code> credentials above, and run</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use app</span><br><span class="line">db.<span class="property">list</span>.<span class="title function_">find</span>()</span><br></pre></td></tr></table></figure>
+
+<p>The output would look something like the following:</p>
+<pre><code>test-set:SECONDARY&gt; db.list.find()
+&#123; &quot;_id&quot; : ObjectId(&quot;5c0f2181080076162e179f22&quot;), &quot;title&quot; : &quot;one&quot; &#125;
+&#123; &quot;_id&quot; : ObjectId(&quot;5c0f2181080076162e179f23&quot;), &quot;title&quot; : &quot;two&quot; &#125;</code></pre><h2 id="Test-with-a-real-node-js-project"><a href="#Test-with-a-real-node-js-project" class="headerlink" title="Test with a real node.js project"></a>Test with a real node.js project</h2><p>If you are not satisfied, you can go on and create a simple node.js project to test the replica set:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker pull node</span><br><span class="line"><span class="built_in">mkdir</span> -p ~/projects/test-mongodb</span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$_</span></span><br><span class="line">npm i mongodb</span><br><span class="line">vim cluster-auth-test.js</span><br></pre></td></tr></table></figure>
+
+<p>and enter (or just copy/paste) the following code</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">MongoClient</span> = <span class="built_in">require</span>(<span class="string">&#x27;mongodb&#x27;</span>).<span class="property">MongoClient</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> url = <span class="string">&#x27;mongodb://appUser:appPass@rc1:27017,rc2:27017,rc3:27017/test?replicaSet=test-set&amp;authSource=admin&#x27;</span></span><br><span class="line"><span class="keyword">const</span> db = <span class="string">&#x27;test&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">main</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;start&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> client = <span class="keyword">await</span> <span class="title class_">MongoClient</span>.<span class="title function_">connect</span>(url, &#123; <span class="attr">useNewUrlParser</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">  <span class="keyword">const</span> col = client.<span class="title function_">db</span>(db).<span class="title function_">collection</span>(<span class="string">&#x27;list&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> col.<span class="title function_">find</span>(&#123;&#125;, &#123; <span class="attr">limit</span>: <span class="number">5</span> &#125;).<span class="title function_">toArray</span>()</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res)</span><br><span class="line">  <span class="keyword">await</span> client.<span class="title function_">close</span>()</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;end&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">main</span>()</span><br></pre></td></tr></table></figure>
+
+<p>Save it, and run it with</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runnode cluster-auth-test.js <span class="string">&quot;--net=mongo-cluster&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>Result:</p>
+<pre><code>start
+[ &#123; _id: 5c0f2181080076162e179f22, title: &apos;one&apos; &#125;,
+&#123; _id: 5c0f2181080076162e179f23, title: &apos;two&apos; &#125; ]
+end</code></pre><p>Note: Since I am running node version 8 in my system, I put <code>node:8</code> in the <code>runnode</code> script, you might need to adjust that to a different version if version 8 is not installed on your system.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2018/12/10/Create-a-mongodb-cluster-with-authentication-enabled/" data-id="cl6pz9i8m001arem97dzm9toi" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2018/12/10/Create-a-mongodb-cluster-with-authentication-enabled/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/" rel="tag">mongodb</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-mongodb-authentication-how-to" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/09/mongodb-authentication-how-to/" class="article-date">
+  <time datetime="2018-12-09T18:09:22.000Z" itemprop="datePublished">2018-12-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/09/mongodb-authentication-how-to/">mongodb authentication by example</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Procedures"><a href="#Procedures" class="headerlink" title="Procedures"></a>Procedures</h2><h3 id="Follow-instruction-in-reference-1-to-create-an-administrator-user"><a href="#Follow-instruction-in-reference-1-to-create-an-administrator-user" class="headerlink" title="Follow instruction in reference #1 to create an administrator user"></a>Follow instruction in reference #1 to create an administrator user</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> admin</span><br><span class="line"><span class="keyword">db</span>.createUser(</span><br><span class="line">  &#123;</span><br><span class="line">    user: <span class="string">&quot;superuser&quot;</span>,</span><br><span class="line">    <span class="keyword">pwd</span>: <span class="string">&quot;supercool&quot;</span>,</span><br><span class="line">    roles: [ &#123; role: <span class="string">&quot;userAdminAnyDatabase&quot;</span>, <span class="keyword">db</span>: <span class="string">&quot;admin&quot;</span> &#125;, <span class="string">&quot;readWriteAnyDatabase&quot;</span> ]</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Create-non-administrator-users"><a href="#Create-non-administrator-users" class="headerlink" title="Create non-administrator users"></a>Create non-administrator users</h3><p>Once the administrator is created, restart mongod with option <code>--auth</code> enabled, and connect to it using </p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongo -u superuser -<span class="selector-tag">p</span> supercool <span class="attr">--authenticationDatabase</span> admin</span><br></pre></td></tr></table></figure>
+
+<p>Let’s say we are going to have a new database named <code>app</code> and we need to create a user to access that. We can either issue <code>use admin</code> or <code>use app</code> before the <code>db.createUser</code> command. Here comes the first note about mongodb authentication: by issuing <code>use app</code>, it doesn’t mean the user (details) will be created in database <code>app</code>, instead, all users information will be stored in <code>system.users</code> collection of <code>admin</code> db. The result of command <code>use admin</code> or <code>use app</code> only serves as an identification purpose for non-administrator user creation, nothing else. Because of this reason and it might be a bit easier for user management, I would suggest that <code>admin</code> be used for all users. Therefore, run the following commands:</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="keyword">app</span></span><br><span class="line"><span class="keyword">db</span>.<span class="keyword">list</span>.insertOne(&#123;</span><br><span class="line">    title: &#x27;learn mongodb authentication&#x27;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> admin</span><br><span class="line"><span class="keyword">db</span>.createUser(</span><br><span class="line">  &#123;</span><br><span class="line">    user: <span class="string">&quot;appUser&quot;</span>,</span><br><span class="line">    <span class="keyword">pwd</span>: <span class="string">&quot;appPass&quot;</span>,</span><br><span class="line">    roles: [ &#123; role: <span class="string">&quot;readWrite&quot;</span>, <span class="keyword">db</span>: <span class="string">&quot;app&quot;</span> &#125; ]</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>To test if the user is created successfully, exit mongo shell and issue a new one</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mongo -u appUser -<span class="selector-tag">p</span> appPass <span class="attr">--authenticationDatabase</span> admin app</span><br><span class="line">show collections</span><br></pre></td></tr></table></figure>
+<p>The last command should show the collection <code>list</code> created by <code>superuser</code> in previous mongo shell session. To ensure user appUser does have the read/write privilege in db <code>app</code>,</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">db<span class="selector-class">.find</span>()</span><br><span class="line">db<span class="selector-class">.list</span><span class="selector-class">.insertOne</span>(&#123;</span><br><span class="line">    something: <span class="string">&#x27;else&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line">db<span class="selector-class">.list</span><span class="selector-class">.find</span>()</span><br></pre></td></tr></table></figure>
+<p>Note: Since user <code>appUser</code> is configured to allow access to only db <code>app</code>, if you issue <code>show databases</code> command, only <code>app</code> would return, and that’s also the reason <code>app</code> needs to be specified in the <code>mongo</code> command.</p>
+<h3 id="A-complete-note-js-example"><a href="#A-complete-note-js-example" class="headerlink" title="A complete note.js example"></a>A complete note.js example</h3><figure class="highlight qml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MongoClient = <span class="built_in">require</span>(<span class="string">&#x27;mongodb&#x27;</span>).MongoClient</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="built_in">url</span> = <span class="string">&#x27;mongodb://appUser:appPass@localhost:27017/app?authSource=admin&#x27;</span></span><br><span class="line"><span class="keyword">const</span> db = <span class="string">&#x27;app&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> main = <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;start&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> client = <span class="keyword">await</span> MongoClient.connect(<span class="built_in">url</span>, &#123; <span class="attribute">useNewUrlParser</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">  <span class="keyword">const</span> col = client.db(db).collection(<span class="string">&#x27;list&#x27;</span>)</span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> col.find(&#123;&#125;, &#123; <span class="attribute">limit</span>: <span class="number">5</span> &#125;).toArray()</span><br><span class="line">  <span class="built_in">console</span>.log(res)</span><br><span class="line">  <span class="keyword">await</span> client.close()</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;end&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Note: option <code>authSource</code> is used to specify <code>authenticationDatabase</code>.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References:"></a>References:</h2><ol>
+<li><p><a target="_blank" rel="noopener" href="https://docs.mongodb.com/manual/tutorial/enable-authentication/">MongoDB Manual</a> on authentication.</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/49445201/mongodb-should-i-put-users-in-admin-db-or-local-db">SO entry</a> on which authentication database to use</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2018/12/09/mongodb-authentication-how-to/" data-id="cl6pz9i8m0018rem95msca9gs" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2018/12/09/mongodb-authentication-how-to/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/" rel="tag">mongodb</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Ubuntu-18-10-installation-notes" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/01/Ubuntu-18-10-installation-notes/" class="article-date">
+  <time datetime="2018-12-01T20:57:55.000Z" itemprop="datePublished">2018-12-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/os/">os</a>►<a class="article-category-link" href="/categories/os/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/01/Ubuntu-18-10-installation-notes/">Ubuntu 18.10 installation notes</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a target="_blank" rel="noopener" href="https://www.ubuntu.com/download/alternative-downloads">Ubuntu 18.10</a> was released not long ago and I decided to give it a try on my Acer Helios 300 (2018 version) and I couldn’t be happier with the result that I made the switch from Manjaro.</p>
+<h2 id="Hardware-preparation"><a href="#Hardware-preparation" class="headerlink" title="Hardware preparation"></a>Hardware preparation</h2><p>I opted to keep the default Windows 10 installation on the built-in nvme drive and install a spare 120G SSD drive to the ssd slot. By default BIOS has SATA mode set to <code>Optane</code> mode which would cause ubuntu not being able to see the drive. Change to <code>ACHI</code> mode instead. Secure Boot feature also needs to be disabled in the BIOS. The trackpad is set to <code>Advanced</code> mode by default in BIOS, change it to <code>Basic</code> because otherwise it won’t operate in Linux.</p>
+<h2 id="A-note-on-backing-up-the-disk-to-an-image"><a href="#A-note-on-backing-up-the-disk-to-an-image" class="headerlink" title="A note on backing up the disk to an image"></a>A note on backing up the disk to an image</h2><p>If you want to do a whole system backup before making any changes. You can use <code>Deepin Clone</code> tool from [Deepin Live System] (<a target="_blank" rel="noopener" href="https://www.deepin.org/en/download/">https://www.deepin.org/en/download/</a>). I used to use <code>CloneZilla</code> to make system backups but it no longer works on this laptop even with UEFI version of the tool - it just won’t show up in the boot menu.</p>
+<h2 id="Software-preparation"><a href="#Software-preparation" class="headerlink" title="Software preparation"></a>Software preparation</h2><p>Downloading the iso from ubuntu.com might be painfully slow. To speed up the downloading, use a bittorrent tool and download from <a target="_blank" rel="noopener" href="http://releases.ubuntu.com/cosmic/">here</a> instead. I downloaded <a target="_blank" rel="noopener" href="http://releases.ubuntu.com/cosmic/ubuntu-18.10-desktop-amd64.iso.torrent">http://releases.ubuntu.com/cosmic/ubuntu-18.10-desktop-amd64.iso.torrent</a></p>
+<h2 id="“missing”-touchpad-right-click-button"><a href="#“missing”-touchpad-right-click-button" class="headerlink" title="“missing” touchpad right click button"></a>“missing” touchpad right click button</h2><p>Upon reboot after the installation, I found that the right button on the trackpad behaves exactly the same as the left button (or a single tap since I enabled that). A bit googling indicates that the two finger tap is the replacement. Therefore make sure tapping is enabled in touchpad and remember to use two finger tapping to mimic the old right click. It doesn’t take long before I get used to the new behavior.</p>
+<h2 id="install-docker-with-the-correct-user-group-setting"><a href="#install-docker-with-the-correct-user-group-setting" class="headerlink" title="install docker with the correct user/group setting"></a>install docker with the correct user/group setting</h2><p>If you plan to install docker and operate it with non-root user, make sure you do the following BEFORE you install it (under Ubuntu Software)</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -aG docker $<span class="keyword">USER</span></span><br><span class="line"><span class="title">newgrp</span> docker</span><br></pre></td></tr></table></figure>
+
+<p>Without the above steps it requires root privileges to run docker commands.</p>
+<h2 id="Don’t-install-visual-studio-code-from-Ubuntu-Software"><a href="#Don’t-install-visual-studio-code-from-Ubuntu-Software" class="headerlink" title="Don’t install visual studio code from Ubuntu Software"></a>Don’t install visual studio code from Ubuntu Software</h2><p>Instead, download and install the package from <a target="_blank" rel="noopener" href="https://go.microsoft.com/fwlink/?LinkID=760868">https://go.microsoft.com/fwlink/?LinkID=760868</a>.<br>If you do install from Ubuntu Software (aka snap) you’ll end up with a very slow start-up problem with VSC. See the issue reported at <a target="_blank" rel="noopener" href="https://github.com/Microsoft/vscode/issues/61565">https://github.com/Microsoft/vscode/issues/61565</a>.</p>
+<h2 id="Get-hardware-sensor-information"><a href="#Get-hardware-sensor-information" class="headerlink" title="Get hardware sensor information"></a>Get hardware sensor information</h2><p>To get information such temperature about the laptop’s cpu/ssd, install <code>Psensor</code> from Ubuntu Software.</p>
+<h2 id="Unofficial-benchmark-results-using-redis"><a href="#Unofficial-benchmark-results-using-redis" class="headerlink" title="Unofficial benchmark results using redis"></a>Unofficial benchmark results using redis</h2><p>With docker/redis I made a quick benchmarking comparison between Manjaro Gnome (17) and Ubuntu (18.10) and I was blown away by the result from Ubuntu. With Manjaro I got about 60K/s operation while I am getting a whopping 150K+/s result from Ubuntu. I am not sure how the result can be so significantly different between Manjaro and Ubuntu. Below is the steps I took on both systems (I did these steps before and after Manjaro is replaced on my laptop).</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull redis</span><br><span class="line">docker <span class="built_in">run</span> <span class="comment">--name my-redis --rm -d redis</span></span><br><span class="line">docker exec -<span class="keyword">it</span> <span class="keyword">my</span>-redis redis-benchmark -q</span><br></pre></td></tr></table></figure>
+<p>Hardware configurations of this laptop:</p>
+<ul>
+<li>CPU i7-8750H with 16G of RAM</li>
+<li>256G nvme drive (with Windows 10 installed)</li>
+<li>120G SSD (with Ubuntu 18.10 installed)</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2018/12/01/Ubuntu-18-10-installation-notes/" data-id="cl6pz9i8l0015rem9ec4a9o70" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2018/12/01/Ubuntu-18-10-installation-notes/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ditch-moment-js-for-date-fns" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/29/ditch-moment-js-for-date-fns/" class="article-date">
+  <time datetime="2017-05-29T19:50:42.000Z" itemprop="datePublished">2017-05-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/programming/">programming</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/29/ditch-moment-js-for-date-fns/">ditch moment.js for date-fns</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I was a moment.js fan until I heard about date-fns. One of the biggest problem with moment.js is that date operations such as .subtract or .add mutates the object! Take the following code for example:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> now = <span class="keyword">new</span> <span class="title function_">moment</span>()</span><br><span class="line"><span class="keyword">var</span> prev = now.<span class="title function_">subtract</span>(<span class="number">5</span>, <span class="string">&#x27;days&#x27;</span>)</span><br><span class="line"><span class="comment">// both prev and now are 5 days ago</span></span><br><span class="line"><span class="comment">// if you need to preserve &#x27;now&#x27;, you need to do something like</span></span><br><span class="line"><span class="keyword">var</span> prev = now.<span class="title function_">clone</span>()</span><br><span class="line">prev.<span class="title function_">subtract</span>(<span class="number">5</span>, <span class="string">&#x27;days&#x27;</span>)</span><br><span class="line"><span class="comment">// prev will be 5 days ago but now remains the initial value</span></span><br></pre></td></tr></table></figure>
+<p>I was surprised in a great deal to find out such weird behavior through googling and bugs in my projects. To make things worse, moment’s doc dosn’t tell you clearly that calling <code>.subtract()</code> or <code>.add()</code> would mutate the original object.</p>
+<p>Another issue working with moment.js is that Moment object is not a native javascript Date object, which means conversions are required, which in turn creates two new problems:</p>
+<ol>
+<li>Bad performance</li>
+<li>Not straigh-forward to work with because you will need to call <code>.toDate()</code> to convert Moment into Date, or <code>moment()</code> to convert Date (or date string) into Moment</li>
+</ol>
+<p>date-fns is billed as the underscore for Dates. If you are a big fan of underscore (or lodash), you know what that means.</p>
+<p>Tldr; here’s the date-fns version of the previous code snippet:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> subDays = <span class="built_in">require</span>(<span class="string">&#x27;date-fns/sub_days&#x27;</span>);	<span class="comment">// note you can import only the function you need</span></span><br><span class="line"><span class="keyword">var</span> now = <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line"><span class="keyword">var</span> prev = <span class="title function_">subDays</span>(now, <span class="number">5</span>);</span><br><span class="line"><span class="comment">// now remains the initial value</span></span><br></pre></td></tr></table></figure>
+
+<p>I have converted some of my existing projects into using date-fns and the experience has been awesome since I don’t have to live with the annoyance that moment.js brings.</p>
+<p>Don’t just take my words, go give <a target="_blank" rel="noopener" href="https://date-fns.org/">https://date-fns.org/</a> a try, or simply</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i date-fns</span><br></pre></td></tr></table></figure>
+<p>if you are already convinced.</p>
+<p>Update: It turns out I am not the only one who feels the need for the switch. Dan Abramov, the creator of redux, mentioned this in late 2016<br><a target="_blank" rel="noopener" href="https://twitter.com/dan_abramov/status/805030922785525760?lang=en">https://twitter.com/dan_abramov/status/805030922785525760?lang=en</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2017/05/29/ditch-moment-js-for-date-fns/" data-id="cl6pz9i8k0011rem9ba0c7mfd" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2017/05/29/ditch-moment-js-for-date-fns/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-OHLC-data-grouping-with-mongodb" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/02/07/OHLC-data-grouping-with-mongodb/" class="article-date">
+  <time datetime="2015-02-07T17:00:00.000Z" itemprop="datePublished">2015-02-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/programming/">programming</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/07/OHLC-data-grouping-with-mongodb/">OHLC data grouping with mongodb</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>In this post I will demonstrate how to do data grouping with OHLC data using mongodb’s powerful aggregation framework.</p>
+<h2 id="The-problem"><a href="#The-problem" class="headerlink" title="The problem:"></a>The problem:</h2><p>Group OHLC data every N weeks where N&gt;1, I should point out that doing weekly data grouping (when N==1) is a whole lot easier.</p>
+<h2 id="Sample-Data"><a href="#Sample-Data" class="headerlink" title="Sample Data:"></a>Sample Data:</h2><figure class="highlight js"><figcaption><span>mongodb_aggregation_data.js</span><a href="/downloads/code/mongodb_aggregation_data.js">view raw</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Data based on http://finance.yahoo.com/q/hp?s=QQQ+Historical+Prices */</span></span><br><span class="line">&gt; db.<span class="property">ohlc</span>.<span class="title function_">find</span>(<span class="params"></span>)</span><br><span class="line">{ <span class="string">&quot;_id&quot;</span> : <span class="title class_">ObjectId</span>(<span class="string">&quot;54d65597daf0910dfa816995&quot;</span>), <span class="string">&quot;S&quot;</span> : <span class="string">&quot;QQQ&quot;</span>, <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;2015-02-06T00:00:00Z&quot;</span>), <span class="string">&quot;O&quot;</span> : <span class="number">103.92</span>, <span class="string">&quot;H&quot;</span> : <span class="number">104.17</span>, <span class="string">&quot;L&quot;</span> : <span class="number">102.76</span>, <span class="string">&quot;C&quot;</span> : <span class="number">103.13</span>, <span class="string">&quot;V&quot;</span> : <span class="number">32833800</span>, <span class="string">&quot;A&quot;</span> : <span class="number">103.13</span> }</span><br><span class="line">{ <span class="string">&quot;_id&quot;</span> : <span class="title class_">ObjectId</span>(<span class="string">&quot;54d65597daf0910dfa816996&quot;</span>), <span class="string">&quot;S&quot;</span> : <span class="string">&quot;QQQ&quot;</span>, <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;2015-02-05T00:00:00Z&quot;</span>), <span class="string">&quot;O&quot;</span> : <span class="number">103.13</span>, <span class="string">&quot;H&quot;</span> : <span class="number">103.83</span>, <span class="string">&quot;L&quot;</span> : <span class="number">102.87</span>, <span class="string">&quot;C&quot;</span> : <span class="number">103.76</span>, <span class="string">&quot;V&quot;</span> : <span class="number">23605500</span>, <span class="string">&quot;A&quot;</span> : <span class="number">103.76</span> }</span><br><span class="line">{ <span class="string">&quot;_id&quot;</span> : <span class="title class_">ObjectId</span>(<span class="string">&quot;54d65597daf0910dfa816997&quot;</span>), <span class="string">&quot;S&quot;</span> : <span class="string">&quot;QQQ&quot;</span>, <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;2015-02-04T00:00:00Z&quot;</span>), <span class="string">&quot;O&quot;</span> : <span class="number">102.54</span>, <span class="string">&quot;H&quot;</span> : <span class="number">103.55</span>, <span class="string">&quot;L&quot;</span> : <span class="number">102.31</span>, <span class="string">&quot;C&quot;</span> : <span class="number">102.87</span>, <span class="string">&quot;V&quot;</span> : <span class="number">34073200</span>, <span class="string">&quot;A&quot;</span> : <span class="number">102.87</span> }</span><br><span class="line">{ <span class="string">&quot;_id&quot;</span> : <span class="title class_">ObjectId</span>(<span class="string">&quot;54d65597daf0910dfa816998&quot;</span>), <span class="string">&quot;S&quot;</span> : <span class="string">&quot;QQQ&quot;</span>, <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;2015-02-03T00:00:00Z&quot;</span>), <span class="string">&quot;O&quot;</span> : <span class="number">102.33</span>, <span class="string">&quot;H&quot;</span> : <span class="number">103.03</span>, <span class="string">&quot;L&quot;</span> : <span class="number">101.68</span>, <span class="string">&quot;C&quot;</span> : <span class="number">102.96</span>, <span class="string">&quot;V&quot;</span> : <span class="number">30750400</span>, <span class="string">&quot;A&quot;</span> : <span class="number">102.96</span> }</span><br><span class="line">{ <span class="string">&quot;_id&quot;</span> : <span class="title class_">ObjectId</span>(<span class="string">&quot;54d65597daf0910dfa816999&quot;</span>), <span class="string">&quot;S&quot;</span> : <span class="string">&quot;QQQ&quot;</span>, <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;2015-02-02T00:00:00Z&quot;</span>), <span class="string">&quot;O&quot;</span> : <span class="number">101.33</span>, <span class="string">&quot;H&quot;</span> : <span class="number">102.07</span>, <span class="string">&quot;L&quot;</span> : <span class="number">99.75</span>, <span class="string">&quot;C&quot;</span> : <span class="number">101.98</span>, <span class="string">&quot;V&quot;</span> : <span class="number">43624700</span>, <span class="string">&quot;A&quot;</span> : <span class="number">101.98</span> }</span><br><span class="line">{ <span class="string">&quot;_id&quot;</span> : <span class="title class_">ObjectId</span>(<span class="string">&quot;54d65597daf0910dfa81699a&quot;</span>), <span class="string">&quot;S&quot;</span> : <span class="string">&quot;QQQ&quot;</span>, <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;2015-01-30T00:00:00Z&quot;</span>), <span class="string">&quot;O&quot;</span> : <span class="number">101.8</span>, <span class="string">&quot;H&quot;</span> : <span class="number">102.58</span>, <span class="string">&quot;L&quot;</span> : <span class="number">100.96</span>, <span class="string">&quot;C&quot;</span> : <span class="number">101.1</span>, <span class="string">&quot;V&quot;</span> : <span class="number">42927600</span>, <span class="string">&quot;A&quot;</span> : <span class="number">101.1</span> }</span><br><span class="line">{ <span class="string">&quot;_id&quot;</span> : <span class="title class_">ObjectId</span>(<span class="string">&quot;54d65597daf0910dfa81699b&quot;</span>), <span class="string">&quot;S&quot;</span> : <span class="string">&quot;QQQ&quot;</span>, <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;2015-01-29T00:00:00Z&quot;</span>), <span class="string">&quot;O&quot;</span> : <span class="number">100.83</span>, <span class="string">&quot;H&quot;</span> : <span class="number">102.08</span>, <span class="string">&quot;L&quot;</span> : <span class="number">99.96</span>, <span class="string">&quot;C&quot;</span> : <span class="number">101.89</span>, <span class="string">&quot;V&quot;</span> : <span class="number">46539700</span>, <span class="string">&quot;A&quot;</span> : <span class="number">101.89</span> }</span><br><span class="line">{ <span class="string">&quot;_id&quot;</span> : <span class="title class_">ObjectId</span>(<span class="string">&quot;54d65597daf0910dfa81699c&quot;</span>), <span class="string">&quot;S&quot;</span> : <span class="string">&quot;QQQ&quot;</span>, <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;2015-01-28T00:00:00Z&quot;</span>), <span class="string">&quot;O&quot;</span> : <span class="number">103.09</span>, <span class="string">&quot;H&quot;</span> : <span class="number">103.18</span>, <span class="string">&quot;L&quot;</span> : <span class="number">100.9</span>, <span class="string">&quot;C&quot;</span> : <span class="number">100.92</span>, <span class="string">&quot;V&quot;</span> : <span class="number">43591700</span>, <span class="string">&quot;A&quot;</span> : <span class="number">100.92</span> }</span><br><span class="line"><span class="comment">/* ... */</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="The-solution"><a href="#The-solution" class="headerlink" title="The solution:"></a>The solution:</h2><figure class="highlight js"><figcaption><span>mongodb_aggregation.js</span><a href="/downloads/code/mongodb_aggregation.js">view raw</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">db.<span class="property">ohlc</span>.<span class="title function_">aggregate</span>({</span><br><span class="line">        <span class="attr">$match</span>: {</span><br><span class="line">            <span class="attr">S</span>: <span class="string">&#x27;QQQ&#x27;</span></span><br><span class="line">        }</span><br><span class="line">    }, {</span><br><span class="line">        <span class="attr">$project</span>: {</span><br><span class="line">            <span class="attr">D</span>: <span class="string">&#x27;$D&#x27;</span>, <span class="attr">O</span>: <span class="string">&#x27;$O&#x27;</span>, <span class="attr">H</span>: <span class="string">&#x27;$H&#x27;</span>, <span class="attr">L</span>: <span class="string">&#x27;$H&#x27;</span>, <span class="attr">C</span>: <span class="string">&#x27;$C&#x27;</span>, <span class="attr">V</span>: <span class="string">&#x27;$V&#x27;</span>, <span class="attr">A</span>: <span class="string">&#x27;$A&#x27;</span>,</span><br><span class="line">            <span class="attr">weeknbr</span>: {</span><br><span class="line">                <span class="attr">$divide</span>: [{</span><br><span class="line">                        <span class="attr">$subtract</span>: [</span><br><span class="line">                            <span class="string">&#x27;$D&#x27;</span>,</span><br><span class="line">                            <span class="keyword">new</span> <span class="title class_">ISODate</span>(<span class="string">&#x27;1970-01-04&#x27;</span>)</span><br><span class="line">                        ]</span><br><span class="line">                    },</span><br><span class="line">                    <span class="number">86400</span> * <span class="number">7000</span></span><br><span class="line">                ]</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }, {</span><br><span class="line">        <span class="attr">$project</span>: {</span><br><span class="line">            <span class="attr">D</span>: <span class="string">&#x27;$D&#x27;</span>, <span class="attr">O</span>: <span class="string">&#x27;$O&#x27;</span>, <span class="attr">H</span>: <span class="string">&#x27;$H&#x27;</span>, <span class="attr">L</span>: <span class="string">&#x27;$H&#x27;</span>, <span class="attr">C</span>: <span class="string">&#x27;$C&#x27;</span>, <span class="attr">V</span>: <span class="string">&#x27;$V&#x27;</span>, <span class="attr">A</span>: <span class="string">&#x27;$A&#x27;</span>,</span><br><span class="line">            <span class="attr">rnd_weeknbr</span>: {</span><br><span class="line">                <span class="attr">$subtract</span>: [</span><br><span class="line">                    <span class="string">&#x27;$weeknbr&#x27;</span>, {</span><br><span class="line">                        <span class="attr">$mod</span>: [</span><br><span class="line">                            <span class="string">&#x27;$weeknbr&#x27;</span>,</span><br><span class="line">                            <span class="number">1</span></span><br><span class="line">                        ]</span><br><span class="line">                    }</span><br><span class="line">                ]</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }, {</span><br><span class="line">        <span class="attr">$project</span>: {</span><br><span class="line">            <span class="attr">D</span>: <span class="string">&#x27;$D&#x27;</span>, <span class="attr">O</span>: <span class="string">&#x27;$O&#x27;</span>, <span class="attr">H</span>: <span class="string">&#x27;$H&#x27;</span>, <span class="attr">L</span>: <span class="string">&#x27;$H&#x27;</span>, <span class="attr">C</span>: <span class="string">&#x27;$C&#x27;</span>, <span class="attr">V</span>: <span class="string">&#x27;$V&#x27;</span>, <span class="attr">A</span>: <span class="string">&#x27;$A&#x27;</span>,</span><br><span class="line">            <span class="attr">grp_weeknbr</span>: {</span><br><span class="line">                <span class="attr">$subtract</span>: [</span><br><span class="line">                    <span class="string">&#x27;$rnd_weeknbr&#x27;</span>, {</span><br><span class="line">                        <span class="attr">$mod</span>: [</span><br><span class="line">                            <span class="string">&#x27;$rnd_weeknbr&#x27;</span>,</span><br><span class="line">                            <span class="number">4</span></span><br><span class="line">                        ]</span><br><span class="line">                    }</span><br><span class="line">                ]</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }, {</span><br><span class="line">        <span class="attr">$sort</span>: {</span><br><span class="line">            <span class="attr">D</span>: <span class="number">1</span></span><br><span class="line">        }</span><br><span class="line">    },</span><br><span class="line"></span><br><span class="line">    {</span><br><span class="line">        <span class="attr">$group</span>: {</span><br><span class="line">            <span class="attr">_id</span>: {</span><br><span class="line">                <span class="attr">grp_weeknbr</span>: <span class="string">&#x27;$grp_weeknbr&#x27;</span></span><br><span class="line">            },</span><br><span class="line">            <span class="attr">D</span>: {</span><br><span class="line">                <span class="attr">$last</span>: <span class="string">&#x27;$D&#x27;</span></span><br><span class="line">            },</span><br><span class="line">            <span class="attr">O</span>: {</span><br><span class="line">                <span class="attr">$first</span>: <span class="string">&#x27;$O&#x27;</span></span><br><span class="line">            },</span><br><span class="line">            <span class="attr">H</span>: {</span><br><span class="line">                <span class="attr">$max</span>: <span class="string">&#x27;$H&#x27;</span></span><br><span class="line">            },</span><br><span class="line">            <span class="attr">L</span>: {</span><br><span class="line">                <span class="attr">$min</span>: <span class="string">&#x27;$L&#x27;</span></span><br><span class="line">            },</span><br><span class="line">            <span class="attr">C</span>: {</span><br><span class="line">                <span class="attr">$last</span>: <span class="string">&#x27;$C&#x27;</span></span><br><span class="line">            },</span><br><span class="line">            <span class="attr">A</span>: {</span><br><span class="line">                <span class="attr">$last</span>: <span class="string">&#x27;$A&#x27;</span></span><br><span class="line">            },</span><br><span class="line">            <span class="attr">V</span>: {</span><br><span class="line">                <span class="attr">$sum</span>: <span class="string">&#x27;$V&#x27;</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }, {</span><br><span class="line">        <span class="attr">$sort</span>: {</span><br><span class="line">            <span class="attr">D</span>: <span class="number">1</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h2 id="The-explanation"><a href="#The-explanation" class="headerlink" title="The explanation:"></a>The explanation:</h2><p>The idea is to</p>
+<ol>
+<li>get the number of weeks (floating point) since a reference date (line #8-17, all OHLC data in the db are later than that date), the reason <code>1970-01-04</code> instead of <code>1970-01-01</code> (which is Wednesday)<br>is chosen is because it lands on Sunday.</li>
+<li>get the floored number of weeks for step 2, line #22-31, since mongodb doesn’t have a round or floor method, this is the only way to get number of week since reference date in integer.</li>
+<li>sort by D, this step is crucial as the next step will need to use method such as $last and $first to get the close and open price for the grouped period.</li>
+<li>group by 4 weeks’ OHLC, line #37-40, number 4 on line #41 can be substituted based on data group unit.</li>
+<li>sort by _id, which consists of the calculated grouping number grp_weeknbr from previous step.</li>
+</ol>
+<p>The reason why the number of weeks needs to be calculated based off a reference date is because of the partial week problem. See <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/28389828/how-to-handle-partial-week-data-grouping-in-mongodb">this SO question</a> that I asked before I came up with the solution documented in this post.</p>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result:"></a>Result:</h2><figure class="highlight js"><figcaption><span>mongodb_aggregation_result.js</span><a href="/downloads/code/mongodb_aggregation_result.js">view raw</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 0 */</span></span><br><span class="line">{</span><br><span class="line">    <span class="string">&quot;result&quot;</span> : [ </span><br><span class="line">        {</span><br><span class="line">            <span class="string">&quot;_id&quot;</span> : {</span><br><span class="line">                <span class="string">&quot;grp_weeknbr&quot;</span> : <span class="number">1520</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;1999-03-19T00:00:00.000Z&quot;</span>),</span><br><span class="line">            <span class="string">&quot;O&quot;</span> : <span class="number">102.25</span>,</span><br><span class="line">            <span class="string">&quot;H&quot;</span> : <span class="number">106.5</span>,</span><br><span class="line">            <span class="string">&quot;L&quot;</span> : <span class="number">102.31</span>,</span><br><span class="line">            <span class="string">&quot;C&quot;</span> : <span class="number">102.44</span>,</span><br><span class="line">            <span class="string">&quot;A&quot;</span> : <span class="number">46.98</span>,</span><br><span class="line">            <span class="string">&quot;V&quot;</span> : <span class="number">50912800</span></span><br><span class="line">        }, </span><br><span class="line">        {</span><br><span class="line">            <span class="string">&quot;_id&quot;</span> : {</span><br><span class="line">                <span class="string">&quot;grp_weeknbr&quot;</span> : <span class="number">1524</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;1999-04-16T00:00:00.000Z&quot;</span>),</span><br><span class="line">            <span class="string">&quot;O&quot;</span> : <span class="number">102.88</span>,</span><br><span class="line">            <span class="string">&quot;H&quot;</span> : <span class="number">112.5</span>,</span><br><span class="line">            <span class="string">&quot;L&quot;</span> : <span class="number">101</span>,</span><br><span class="line">            <span class="string">&quot;C&quot;</span> : <span class="number">103.94</span>,</span><br><span class="line">            <span class="string">&quot;A&quot;</span> : <span class="number">47.67</span>,</span><br><span class="line">            <span class="string">&quot;V&quot;</span> : <span class="number">182968000</span></span><br><span class="line">        }, </span><br><span class="line">		<span class="comment">/* ... */</span></span><br><span class="line">        {</span><br><span class="line">            <span class="string">&quot;_id&quot;</span> : {</span><br><span class="line">                <span class="string">&quot;grp_weeknbr&quot;</span> : <span class="number">2344</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;2015-01-02T00:00:00.000Z&quot;</span>),</span><br><span class="line">            <span class="string">&quot;O&quot;</span> : <span class="number">105.11</span>,</span><br><span class="line">            <span class="string">&quot;H&quot;</span> : <span class="number">105.57</span>,</span><br><span class="line">            <span class="string">&quot;L&quot;</span> : <span class="number">102.09</span>,</span><br><span class="line">            <span class="string">&quot;C&quot;</span> : <span class="number">102.94</span>,</span><br><span class="line">            <span class="string">&quot;A&quot;</span> : <span class="number">102.94</span>,</span><br><span class="line">            <span class="string">&quot;V&quot;</span> : <span class="number">695244900</span></span><br><span class="line">        }, </span><br><span class="line">        {</span><br><span class="line">            <span class="string">&quot;_id&quot;</span> : {</span><br><span class="line">                <span class="string">&quot;grp_weeknbr&quot;</span> : <span class="number">2348</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;2015-01-30T00:00:00.000Z&quot;</span>),</span><br><span class="line">            <span class="string">&quot;O&quot;</span> : <span class="number">102.5</span>,</span><br><span class="line">            <span class="string">&quot;H&quot;</span> : <span class="number">104.58</span>,</span><br><span class="line">            <span class="string">&quot;L&quot;</span> : <span class="number">100.95</span>,</span><br><span class="line">            <span class="string">&quot;C&quot;</span> : <span class="number">101.1</span>,</span><br><span class="line">            <span class="string">&quot;A&quot;</span> : <span class="number">101.1</span>,</span><br><span class="line">            <span class="string">&quot;V&quot;</span> : <span class="number">794977000</span></span><br><span class="line">        }, </span><br><span class="line">        {</span><br><span class="line">            <span class="string">&quot;_id&quot;</span> : {</span><br><span class="line">                <span class="string">&quot;grp_weeknbr&quot;</span> : <span class="number">2352</span></span><br><span class="line">            },</span><br><span class="line">            <span class="string">&quot;D&quot;</span> : <span class="title class_">ISODate</span>(<span class="string">&quot;2015-02-06T00:00:00.000Z&quot;</span>),</span><br><span class="line">            <span class="string">&quot;O&quot;</span> : <span class="number">101.33</span>,</span><br><span class="line">            <span class="string">&quot;H&quot;</span> : <span class="number">104.17</span>,</span><br><span class="line">            <span class="string">&quot;L&quot;</span> : <span class="number">102.07</span>,</span><br><span class="line">            <span class="string">&quot;C&quot;</span> : <span class="number">103.13</span>,</span><br><span class="line">            <span class="string">&quot;A&quot;</span> : <span class="number">103.13</span>,</span><br><span class="line">            <span class="string">&quot;V&quot;</span> : <span class="number">164887600</span></span><br><span class="line">        }</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;ok&quot;</span> : <span class="number">1</span></span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+
+<p><em>Note</em>: Last group (2015-02-06) contains only one-week (first week of the group) worth of data.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2015/02/07/OHLC-data-grouping-with-mongodb/" data-id="cl6pz9i8k000yrem914tv3xpe" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2015/02/07/OHLC-data-grouping-with-mongodb/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongodb/" rel="tag">mongodb</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-i-just-built-my-first-standing-desk" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/03/23/i-just-built-my-first-standing-desk/" class="article-date">
+  <time datetime="2014-03-23T21:38:00.000Z" itemprop="datePublished">2014-03-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/DIY/">DIY</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/03/23/i-just-built-my-first-standing-desk/">I just built my first standing desk</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="So-it’s-for-real"><a href="#So-it’s-for-real" class="headerlink" title="So it’s for real"></a>So it’s for real</h2><p>I’ve always wanted to build a standing desk using Ikea parts. Other people have done it with Finnvard height adjustable table legs (<a target="_blank" rel="noopener" href="http://www.ikea.com/us/en/catalog/products/00144763/">http://www.ikea.com/us/en/catalog/products/00144763/</a>) and a table top. My plan was put off because the Long Island Ikdea store discontinued the Finnvard legs for some time. I was lucky to find them in-store again this weekend and Voilà - my dream desk is finally built:</p>
+<img src="/images/standing_desk_1.JPG" class="center">
+<img src="/images/standing_desk_2.JPG" class="left">
+<img src="/images/standing_desk_3.JPG" class="center">
+
+<p>I bought this $40 stool just incase I need to take a short break from standing:<br><a target="_blank" rel="noopener" href="http://www.ikea.com/us/en/catalog/products/50199215/">http://www.ikea.com/us/en/catalog/products/50199215/</a></p>
+<p>I also like the fact that I am able to stuff my laser printer onto the shell:</p>
+<img src="/images/standing_desk_4.JPG" class="center">
+
+<h2 id="Here’s-the-recipe"><a href="#Here’s-the-recipe" class="headerlink" title="Here’s the recipe"></a>Here’s the recipe</h2><p>1 x Linnmon table top, <a target="_blank" rel="noopener" href="http://www.ikea.com/us/en/catalog/products/50251350/">http://www.ikea.com/us/en/catalog/products/50251350/</a>, $40</p>
+<p>2 x Finnvard table legs <a target="_blank" rel="noopener" href="http://www.ikea.com/us/en/catalog/products/00144763/">http://www.ikea.com/us/en/catalog/products/00144763/</a>, $30 ea</p>
+<p>1 x Tertial Work lamp, <a target="_blank" rel="noopener" href="http://www.ikea.com/us/en/catalog/products/20370383/">http://www.ikea.com/us/en/catalog/products/20370383/</a>, $9</p>
+<p>Total: $109+Tax</p>
+<h2 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h2><p>I didn’t do some serious hack to increase the height of the table legs like this guy did <a target="_blank" rel="noopener" href="http://www.ikeahackers.net/2014/02/convert-the-finnvard-into-a-height-adjustable-standing-desk.html">http://www.ikeahackers.net/2014/02/convert-the-finnvard-into-a-height-adjustable-standing-desk.html</a> because the legs are able to reach upto 36 5/8, with 1” for the table top, the final result is 37 5/8, which is pretty close to my ideal desk height (the height where elbows can rest on the table top).</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2014/03/23/i-just-built-my-first-standing-desk/" data-id="cl6pz9i8j000wrem9d9am1mv8" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2014/03/23/i-just-built-my-first-standing-desk/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fun/" rel="tag">fun</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ikea/" rel="tag">ikea</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-install-gitlab-6-dot-4-on-raspberry-pi" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/01/11/install-gitlab-6-dot-4-on-raspberry-pi/" class="article-date">
+  <time datetime="2014-01-11T14:31:00.000Z" itemprop="datePublished">2014-01-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/howto/">howto</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/01/11/install-gitlab-6-dot-4-on-raspberry-pi/">Install Gitlab(6.4) on Raspberry PI</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I am a big fan of both Raspberry PI and Gitlab so it kinda bugs me when my attempts to install Gitlab onto RPI didn’t succeed because of failure to install therubyracer gem. Others experienced the similar problems I encountered: <a target="_blank" rel="noopener" href="http://www.raspberrypi.org/phpBB3/viewtopic.php?t=32716&p=397934">http://www.raspberrypi.org/phpBB3/viewtopic.php?t=32716&amp;p=397934</a>, by following most of user dpenezic’s instruction I finally made it to install Gitlab (currently at version 6.4) onto my RPI (512MB Ram but only 384MB is available to the system as I allocate the rest to GPU). So here are what I did:</p>
+<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><p>1) Follow <a target="_blank" rel="noopener" href="https://github.com/gitlabhq/gitlabhq/blob/6-4-stable/doc/install/installation.md">https://github.com/gitlabhq/gitlabhq/blob/6-4-stable/doc/install/installation.md</a> until “Install Gems”</p>
+<p>2) Install libv8 (<a target="_blank" rel="noopener" href="https://github.com/cowboyd/libv8">https://github.com/cowboyd/libv8</a>)</p>
+<pre><code># [update: added git-svn to the list on 1/17/2014]
+sudo apt-get install -y subversion git-svn
+[ -d ~/tmp ] || mkdir ~/tmp
+cd ~/tmp
+git clone https://github.com/cowboyd/libv8
+cd libv8
+bundle install
+# be patient, the following command takes a while
+bundle exec rake clean build binary
+sudo gem install pkg/libv8-3.11.8.17-armv6l-linux.gem</code></pre><p>3) Modify /home/git/gitlab/Gemfile (and .lock) to skip installation of libv8 (as it’s installed through the above step) and the rubyracer</p>
+<pre><code>cd /home/git/gitlab
+sudo -u git -H editor Gemfile    # and remove the line: gem &quot;therubyracer&quot;
+sudo -u git -H editor Gemfile.lock    # and removed the following lines
+    libv8 (3.16.14.3)
+    therubyracer (0.12.0)
+      libv8 (~&gt; 3.16.14.0)
+      ref</code></pre><p>4) Install node.js, you can take a look at the script I came up with to compile node.js in RPI: <a target="_blank" rel="noopener" href="https://github.com/midnightcodr/rpi_node_install">https://github.com/midnightcodr/rpi_node_install</a></p>
+<p>5) Now you can resume the “Install Gems” step in the Gitlab installation guide</p>
+<pre><code>sudo -u git -H bundle install --deployment --without development test postgres aws
+# and the rest</code></pre><h2 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h2><p>1) 384MB is not enough to run “Compile assets” step on the gitlab installation guide so I had to add some more swap memory by following <a target="_blank" rel="noopener" href="http://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/">http://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/</a></p>
+<pre><code>sudo dd if=/dev/zero of=/swapfile1 bs=1024 count=524288
+sudo mkswap /swapfile1
+sudo chmod 0600 /swapfile1
+sudo swapon /swapfile1</code></pre><p>2) Make sure the server_name setting in /etc/nginx/sites-available/gitlab matches gitlab_url in /home/git/gitlab-shell/config.yml, also add an entry to your RPI’s /etc/hosts</p>
+<pre><code>127.0.0.1    gitlab.server.hostname</code></pre><p>3) With the current version of Gitlab, performance is not that bad at all - it takes about 2 seconds to switch pages.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://midnightcodr.github.io/2014/01/11/install-gitlab-6-dot-4-on-raspberry-pi/" data-id="cl6pz9i8i000srem90m33es8j" class="article-share-link">Share</a>
+      
+        <a href="http://midnightcodr.github.io/2014/01/11/install-gitlab-6-dot-4-on-raspberry-pi/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/raspberrypi/" rel="tag">raspberrypi</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+    </nav>
+  
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DIY/">DIY</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DIY/fun/">fun</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/fun/">fun</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/fun/health/">health</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/fun/health/programming/">programming</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/howto/">howto</a><span class="category-list-count">6</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/howto/fun/">fun</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/howto/">howto</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/os/">os</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/os/note/">note</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/programming/">programming</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/programming/security/">security</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tip/">tip</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSL/" rel="tag">SSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/actix-web/" rel="tag">actix-web</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centos/" rel="tag">centos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cli/" rel="tag">cli</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fun/" rel="tag">fun</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/" rel="tag">gitlab</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hapijs/" rel="tag">hapijs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/how-to/" rel="tag">how-to</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ikea/" rel="tag">ikea</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/" rel="tag">mongodb</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nagios/" rel="tag">nagios</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/" rel="tag">nodejs</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nsq/" rel="tag">nsq</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/openssl/" rel="tag">openssl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/raspberrypi/" rel="tag">raspberrypi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rust/" rel="tag">rust</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tonymacx86/" rel="tag">tonymacx86</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zsh/" rel="tag">zsh</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/SSL/" style="font-size: 10px;">SSL</a> <a href="/tags/actix-web/" style="font-size: 10px;">actix-web</a> <a href="/tags/centos/" style="font-size: 10px;">centos</a> <a href="/tags/cli/" style="font-size: 10px;">cli</a> <a href="/tags/fun/" style="font-size: 10px;">fun</a> <a href="/tags/gitlab/" style="font-size: 10px;">gitlab</a> <a href="/tags/hapijs/" style="font-size: 10px;">hapijs</a> <a href="/tags/how-to/" style="font-size: 10px;">how-to</a> <a href="/tags/ikea/" style="font-size: 10px;">ikea</a> <a href="/tags/javascript/" style="font-size: 20px;">javascript</a> <a href="/tags/mongodb/" style="font-size: 20px;">mongodb</a> <a href="/tags/nagios/" style="font-size: 10px;">nagios</a> <a href="/tags/nodejs/" style="font-size: 15px;">nodejs</a> <a href="/tags/nsq/" style="font-size: 10px;">nsq</a> <a href="/tags/openssl/" style="font-size: 10px;">openssl</a> <a href="/tags/raspberrypi/" style="font-size: 10px;">raspberrypi</a> <a href="/tags/rust/" style="font-size: 10px;">rust</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/tonymacx86/" style="font-size: 10px;">tonymacx86</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/zsh/" style="font-size: 10px;">zsh</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">March 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/01/">January 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">June 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/04/">April 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">December 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">November 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/09/How-to-handle-file-uploads-using-actix-web/">How to handle file uploads using actix-web</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/08/Add-error-code-s-to-Hapijs-validation-output/">Add error code(s) to Hapijs output</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/14/How-to-test-nsq-with-docker-and-nsqjs/">How to test nsq with docker (and nsqjs)</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/10/Create-a-mongodb-cluster-with-authentication-enabled/">Create a mongodb cluster using Docker with authentication enabled</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/09/mongodb-authentication-how-to/">mongodb authentication by example</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Rico Chen<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'ricosnewblog';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
